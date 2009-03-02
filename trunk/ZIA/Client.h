@@ -14,14 +14,18 @@ class Client
 {
 private:
 	SOCKET		_sock;
+	sockaddr	_clientSrcInf;
+	SOCKADDR_IN	_clientSrcInfIn;
+
 	CL_STAT		_status;
 //	Request		_request;
 //	Response	_response;
 //	Timer			_timer;
 	int*			_readQueue;
 	int*			_writeQueue;
+
 public:
-	Client(SOCKET);
+	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client(void);
 
 	void	process();
@@ -30,4 +34,6 @@ public:
 	
 	void	canWrite(int*);
 	void	canRead(int*);
+
+	const char	*getIp();
 };

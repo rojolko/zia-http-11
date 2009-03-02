@@ -12,6 +12,12 @@ ConnectionManager::ConnectionManager(const int port)
 ConnectionManager::~ConnectionManager(void)
 {
 	WSACleanup();
+	for (this->_clientIt = this->_clientList.begin(); !this->_clientList.empty(); this->_clientIt = _clientList.begin())
+	{
+		std::cout << "ConnectionManager Destructor - Erasing Client -> " << this->_clientIt->first << "-"<< this->_clientIt->second->getIp() << std::endl;
+		delete this->_clientList[this->_clientIt->first];
+		this->_clientList.erase(this->_clientIt->first);
+	}
 	std::cout << "ConnectionManager Destroyed." << std::endl;
 }
 
@@ -52,7 +58,7 @@ void ConnectionManager::cmBind(const int port)
 	err = bind(this->_sock,(struct sockaddr*)&this->_src_inf, sizeof(this->_src_inf));
 	if (err != 0)
 	{
-		printf("Couldn't list on port %d with error : %d, WSA error %d.\n", port, err, WSAGetLastError());
+		printf("Couldn't listen on port %d with error : %d, WSA error %d.\n", port, err, WSAGetLastError());
 		throw("Bind failed.");
 	}
 }
@@ -97,11 +103,11 @@ void		ConnectionManager::fdProcess()
 
 void		ConnectionManager::cmNewClient()
 {
-	int				clientSocket;
+	SOCKET			clientSocket;
 	sockaddr		clientSrcInf;
 	int				sizeofClientSrcInf;
 	SOCKADDR_IN		clientSrcInfBis;
-//EN CONSTRUCTION
+//EN CONSTRUCTION  --- a dynamiser avec la liste
 	sizeofClientSrcInf = sizeof(clientSrcInf);
 	clientSocket = accept(this->_sock, &clientSrcInf, &sizeofClientSrcInf);
 	sizeofClientSrcInf = sizeof(clientSrcInfBis);
@@ -110,7 +116,26 @@ void		ConnectionManager::cmNewClient()
 		std::cout << "Couldn't accept TCP session with error : " << WSAGetLastError() << std::endl;
 	else
 	{
-		std::cout << "New TCP Connection OK, from " << inet_ntoa( (in_addr)clientSrcInfBis.sin_addr);
+		//On instancie un nouveau client et c'est parti pour le mettre dans la map/liste
+		this->allocNewClientInList(clientSocket, clientSrcInf, clientSrcInfBis);
+		std::cout << "New TCP Connection OK, from " << inet_ntoa((in_addr)clientSrcInfBis.sin_addr);
 		std::cout << std::endl;
 	}
+}
+
+void		ConnectionManager::allocNewClientInList(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
+{
+	Client *newClient;
+
+	newClient = new Client(sock, srcInf, srcInfIn);
+	this->_clientIt = this->_clientList.end();
+	this->_clientList.insert(std::pair<SOCKET, Client*>(sock, newClient));
+	this->dumpClientsData();
+}
+
+void	ConnectionManager::dumpClientsData()
+{
+	std::cout << "ConnectionManagerDump :" << std::endl;
+	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); ++this->_clientIt)
+		std::cout << "	" << this->_clientIt->first << "-"<< this->_clientIt->second->getIp() << std::endl;
 }
