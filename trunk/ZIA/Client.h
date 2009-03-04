@@ -1,5 +1,9 @@
 #pragma once
+
 #include <Winsock2.h>
+
+#include <string>
+#include <iostream>
 
 enum	CL_STAT
 {
@@ -23,7 +27,7 @@ private:
 //	Timer			_timer;
 	int*			_readQueue;
 	int*			_writeQueue;
-
+	char			_readBuff[1024];
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client(void);
@@ -36,4 +40,7 @@ public:
 	void	canRead(int*);
 
 	const char	*getIp();
+
+	void	setStatus(enum CL_STAT value);
+	bool	toKill();
 };
