@@ -80,10 +80,20 @@ void		ConnectionManager::fillFdSet()
 	//Read Part
 		//Fill with Main socket
 	FD_SET(this->_sock, &this->_read);
-		//Fill with Clients foreach blablablah ... 
-
+		//Fill with Clients
+	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); )
+		if (!this->_clientIt->second->toKill())
+		{
+			FD_SET(this->_clientIt->first, &this->_read);
+			++this->_clientIt;
+		}
+		else
+		{
+			delete this->_clientList[this->_clientIt->first];
+			this->_clientList.erase(this->_clientIt++);
+		}
 	//Write Part
-		//Fill with Clients foreach blablablah ...
+		//Fill with Clients
 }
 
 void		ConnectionManager::doSelect()
@@ -97,8 +107,14 @@ void		ConnectionManager::fdProcess()
 		//Main Socket for connection attempts
 	if (FD_ISSET(this->_sock, &this->_read))
 		this->cmNewClient();
+	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); ++this->_clientIt)
+		if (FD_ISSET(this->_clientIt->first, &this->_read))
+			this->_clientIt->second->setStatus(FETCH);
 	//Write Part
 
+	//Launch Clients Processing
+	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); ++this->_clientIt)
+		this->_clientIt->second->process();
 }
 
 void		ConnectionManager::cmNewClient()
