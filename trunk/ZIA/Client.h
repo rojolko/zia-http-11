@@ -21,6 +21,8 @@
 #include <string>
 #include <iostream>
 
+#define	CL_BUFF_SIZE	512
+
 enum	CL_STAT
 {
 	CONNECT,
@@ -40,10 +42,10 @@ private:
 	CL_STAT		_status;
 //	Request		_request;
 //	Response	_response;
-//	Timer		_timer;
-	int*		_readQueue;
-	int*		_writeQueue;
-	char		_readBuff[1024];
+//	Timer			_timer;
+	int*			_readQueue;
+	int*			_writeQueue;
+	char			_readBuff[CL_BUFF_SIZE];
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client(void);

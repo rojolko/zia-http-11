@@ -33,7 +33,7 @@ void	Client::process()
 		{
 			std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
 			//Launch Read on the client's socket
-			readRet = recv(this->_sock, this->_readBuff, 1024, 0);
+			readRet = recv(this->_sock, this->_readBuff, CL_BUFF_SIZE - 1, 0);
 			std::cout << "ReadRet -> [" << readRet << "]" << std::endl;
 			this->_readBuff[readRet] = '\0';
 			if (readRet)
