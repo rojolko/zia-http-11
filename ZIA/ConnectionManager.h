@@ -1,6 +1,26 @@
 #pragma once
 
-#include <winsock2.h>
+#if defined(WIN32) || defined(WIN64)
+
+// WINDBLOWS
+# include <Winsock2.h>
+
+#else
+
+// NUXSME
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# define SOCKET			int
+//# define sockaddr		struct sockaddr_in *
+# define SOCKADDR_IN		struct sockaddr_in
+# define SOCKADDR		struct sockaddr_in
+# define INVALID_SOCKET		-1
+# define SOCKET_ERROR		-1
+
+#endif
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -12,7 +32,9 @@ class ConnectionManager
 private:
 	SOCKET								_sock;
 	SOCKADDR_IN							_src_inf;
+#if defined(WIN32) || defined(WIN64)
 	WSADATA								_wsaData;
+#endif
 	fd_set								_read;
 	fd_set								_write;
 	std::map<SOCKET, Client*>			_clientList;

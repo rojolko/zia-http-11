@@ -1,5 +1,16 @@
 #pragma once
 
+#if defined(WIN32) || defined(WIN64)
+
+// # include <process.h> ?
+
+#else
+
+# include <pthread.h>
+# include <unistd.h>
+
+#endif
+
 class Thread
 {
 	// Variables
@@ -7,13 +18,13 @@ private:
 
 	bool	tExec;
 
-	#ifdef WIN32
+#if defined(WIN32) || defined(WIN64)
 	HANDLE _handle;
 	unsigned int _identThreadW32;
-	#else
+#else
 	pthread_t _handle;
 	static void * ThreadLauncher();
-	#endif 
+#endif 
 	
 	
 public:
@@ -24,6 +35,10 @@ public:
 	~Thread();
 
 	// Methods
+#if defined(WIN32) || defined(WIN64)
 	HANDLE	tStart(void *, void *);
-	void		tStop();
+#else
+	pthread_t tStart(void*,void*);
+#endif
+	void	tStop();
 };
