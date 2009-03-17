@@ -3,8 +3,8 @@
 #if defined(WIN32) || defined(WIN64)
 
 // WINDBLOWS
-# include <Winsock2.h>
-
+#include <Winsock2.h>
+#define socklen_t int
 #else
 
 // NUXSME

@@ -143,27 +143,27 @@ void		ConnectionManager::cmNewClient()
 {
 	SOCKET			clientSocket;
 	sockaddr		clientSrcInf;
-	int				sizeofClientSrcInf;
+	socklen_t		sizeofClientSrcInf;
 	SOCKADDR_IN		clientSrcInfBis;
-//EN CONSTRUCTION  --- a dynamiser avec la liste
+
 	sizeofClientSrcInf = sizeof(clientSrcInf);
-	clientSocket = accept(this->_sock, &clientSrcInf, (socklen_t*)&sizeofClientSrcInf);
+	clientSocket = accept(this->_sock, &clientSrcInf, &sizeofClientSrcInf);
 	sizeofClientSrcInf = sizeof(clientSrcInfBis);
 	getpeername(clientSocket, (sockaddr *)&clientSrcInfBis, (socklen_t*)&sizeofClientSrcInf); // SOCKADDR -> sockaddr?
 	if(clientSocket == INVALID_SOCKET)
 	  {
 #if defined(WIN32) || defined(WIN64)
-	  std::cout << "Couldn't accept TCP session with error : " << WSAGetLastError() << std::endl;
+		  std::cout << "Couldn't accept TCP session with error : " << WSAGetLastError() << std::endl;
 #else
-	perror("Couldn't accept TCP session with error : ");
+		  perror("Couldn't accept TCP session with error : ");
 #endif
 	  }
 	else
 	  {
-		//On instancie un nouveau client et c'est parti pour le mettre dans la map/liste
-		this->allocNewClientInList(clientSocket, clientSrcInf, clientSrcInfBis);
-		std::cout << "New TCP Connection OK, from " << inet_ntoa((in_addr)clientSrcInfBis.sin_addr);
-		std::cout << std::endl;
+		  //On instancie un nouveau client et c'est parti pour le mettre dans la map/liste
+		  this->allocNewClientInList(clientSocket, clientSrcInf, clientSrcInfBis);
+		  std::cout << "New TCP Connection OK, from " << inet_ntoa((in_addr)clientSrcInfBis.sin_addr);
+		  std::cout << std::endl;
 	  }
 }
 
