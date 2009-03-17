@@ -1,6 +1,22 @@
 #pragma once
 
-#include <Winsock2.h>
+#if defined(WIN32) || defined(WIN64)
+
+// WINDBLOWS
+# include <Winsock2.h>
+
+#else
+
+// NUXSME
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <unistd.h>
+# define SOCKET			int
+//# define sockaddr		struct sockaddr_in *
+# define SOCKADDR_IN		struct sockaddr_in
+
+#endif
 
 #include <string>
 #include <iostream>
@@ -24,10 +40,10 @@ private:
 	CL_STAT		_status;
 //	Request		_request;
 //	Response	_response;
-//	Timer			_timer;
-	int*			_readQueue;
-	int*			_writeQueue;
-	char			_readBuff[1024];
+//	Timer		_timer;
+	int*		_readQueue;
+	int*		_writeQueue;
+	char		_readBuff[1024];
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client(void);

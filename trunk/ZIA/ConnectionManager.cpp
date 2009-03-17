@@ -2,40 +2,48 @@
 
 ConnectionManager::ConnectionManager(const int port)
 {
-	this->cmInitWSA();
-	this->cmSetSocket();
-	this->cmBind(port);
-	this->cmListen();
-	std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
+#if defined(WIN32) || defined(WIN64)
+  this->cmInitWSA();
+#endif
+  this->cmSetSocket();
+  this->cmBind(port);
+  this->cmListen();
+  
+  std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
 }
 
 ConnectionManager::~ConnectionManager(void)
 {
-	WSACleanup();
-	for (this->_clientIt = this->_clientList.begin(); !this->_clientList.empty(); this->_clientIt = _clientList.begin())
-	{
-		std::cout << "ConnectionManager Destructor - Erasing Client -> " << this->_clientIt->first << "-"<< this->_clientIt->second->getIp() << std::endl;
-		delete this->_clientList[this->_clientIt->first];
-		this->_clientList.erase(this->_clientIt->first);
-	}
-	std::cout << "ConnectionManager Destroyed." << std::endl;
+#if defined(WIN32) || defined(WIN64)
+  WSACleanup();
+#endif
+  
+  for (this->_clientIt = this->_clientList.begin(); !this->_clientList.empty(); this->_clientIt = _clientList.begin())
+    {
+      std::cout << "ConnectionManager Destructor - Erasing Client -> " << this->_clientIt->first << "-"<< this->_clientIt->second->getIp() << std::endl;
+      delete this->_clientList[this->_clientIt->first];
+      this->_clientList.erase(this->_clientIt->first);
+    }
+  std::cout << "ConnectionManager Destroyed." << std::endl;
 }
 
 void		ConnectionManager::cmInitWSA()
 {
-	int	err;
+#if defined(WIN32) || defined(WIN64)
+  int	err;
 
-	err = WSAStartup(MAKEWORD(2, 2), &this->_wsaData);
-	if (err != 0)
-	{
-		printf("WSAStartup failed with error: %d\n", err);
-		throw("WSA error.");
+  err = WSAStartup(MAKEWORD(2, 2), &this->_wsaData);
+  if (err != 0)
+    {
+      printf("WSAStartup failed with error: %d\n", err);
+      throw("WSA error.");
     }
-	if (LOBYTE(this->_wsaData.wVersion) != 2 || HIBYTE(this->_wsaData.wVersion) != 2)
-	{
-		WSACleanup();
-		throw("Could not find a usable version of Winsock.dll");
-	}
+  if (LOBYTE(this->_wsaData.wVersion) != 2 || HIBYTE(this->_wsaData.wVersion) != 2)
+    {
+      WSACleanup();
+      throw("Could not find a usable version of Winsock.dll");
+    }
+#endif
 }
 
 void		ConnectionManager::cmSetSocket()
@@ -43,8 +51,12 @@ void		ConnectionManager::cmSetSocket()
 	this->_sock = socket(AF_INET, SOCK_STREAM, NULL);
 	if (this->_sock == INVALID_SOCKET)
 	{
-		std::cout << "Couldn't create socket with error : " << WSAGetLastError() << std::endl;
-		throw("Socket error.");
+#if defined(WIN32) || defined(WIN64)
+	  std::cout << "Couldn't create socket with error : " << WSAGetLastError() << std::endl;
+#else
+	  perror("Couldn't create socket with error: ");
+#endif
+	  throw("Socket error.");
 	}
 }
 
@@ -55,10 +67,16 @@ void ConnectionManager::cmBind(const int port)
 	this->_src_inf.sin_family = AF_INET;
 	this->_src_inf.sin_addr.s_addr = INADDR_ANY; // Ecoute sur toutes les IP locales 
 	this->_src_inf.sin_port = htons(port); // Ecoute sur le port
+	
 	err = bind(this->_sock,(struct sockaddr*)&this->_src_inf, sizeof(this->_src_inf));
+	
 	if (err != 0)
 	{
-		printf("Couldn't listen on port %d with error : %d, WSA error %d.\n", port, err, WSAGetLastError());
+#if defined(WIN32) || defined(WIN64)
+	  printf("Couldn't listen on port %d with error : %d, WSA error %d.\n", port, err, WSAGetLastError());
+#else
+	  perror("Couldn't listen with error: ");
+#endif
 		throw("Bind failed.");
 	}
 }
@@ -67,8 +85,12 @@ void ConnectionManager::cmListen()
 {
 	if (listen(this->_sock, 100) == SOCKET_ERROR)
 	{
-		closesocket(this->_sock);
-		WSACleanup();
+#if defined(WIN32) || defined(WIN64)
+	  closesocket(this->_sock);
+	  WSACleanup();
+#else
+	  close(this->_sock);
+#endif
 		throw("listen error.");
 	}
 }
@@ -78,9 +100,9 @@ void		ConnectionManager::fillFdSet()
 	FD_ZERO(&this->_read);
 	FD_ZERO(&this->_write);
 	//Read Part
-		//Fill with Main socket
+	//Fill with Main socket
 	FD_SET(this->_sock, &this->_read);
-		//Fill with Clients
+	//Fill with Clients
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); )
 		if (!this->_clientIt->second->toKill())
 		{
@@ -93,7 +115,7 @@ void		ConnectionManager::fillFdSet()
 			this->_clientList.erase(this->_clientIt++);
 		}
 	//Write Part
-		//Fill with Clients
+	//Fill with Clients
 }
 
 void		ConnectionManager::doSelect()
@@ -125,18 +147,24 @@ void		ConnectionManager::cmNewClient()
 	SOCKADDR_IN		clientSrcInfBis;
 //EN CONSTRUCTION  --- a dynamiser avec la liste
 	sizeofClientSrcInf = sizeof(clientSrcInf);
-	clientSocket = accept(this->_sock, &clientSrcInf, &sizeofClientSrcInf);
+	clientSocket = accept(this->_sock, &clientSrcInf, (socklen_t*)&sizeofClientSrcInf);
 	sizeofClientSrcInf = sizeof(clientSrcInfBis);
-	getpeername(clientSocket, (SOCKADDR *)&clientSrcInfBis, &sizeofClientSrcInf);
+	getpeername(clientSocket, (sockaddr *)&clientSrcInfBis, (socklen_t*)&sizeofClientSrcInf); // SOCKADDR -> sockaddr?
 	if(clientSocket == INVALID_SOCKET)
-		std::cout << "Couldn't accept TCP session with error : " << WSAGetLastError() << std::endl;
+	  {
+#if defined(WIN32) || defined(WIN64)
+	  std::cout << "Couldn't accept TCP session with error : " << WSAGetLastError() << std::endl;
+#else
+	perror("Couldn't accept TCP session with error : ");
+#endif
+	  }
 	else
-	{
+	  {
 		//On instancie un nouveau client et c'est parti pour le mettre dans la map/liste
 		this->allocNewClientInList(clientSocket, clientSrcInf, clientSrcInfBis);
 		std::cout << "New TCP Connection OK, from " << inet_ntoa((in_addr)clientSrcInfBis.sin_addr);
 		std::cout << std::endl;
-	}
+	  }
 }
 
 void		ConnectionManager::allocNewClientInList(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
