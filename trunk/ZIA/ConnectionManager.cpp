@@ -8,7 +8,8 @@ ConnectionManager::ConnectionManager(const int port)
   this->cmSetSocket();
   this->cmBind(port);
   this->cmListen();
-  
+  this->_selectTime.tv_sec = 0;
+  this->_selectTime.tv_usec = 10;
   std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
 }
 
@@ -49,6 +50,7 @@ void		ConnectionManager::cmInitWSA()
 void		ConnectionManager::cmSetSocket()
 {
 	this->_sock = socket(AF_INET, SOCK_STREAM, NULL);
+  this->_maxFdVal = this->_sock;
 	if (this->_sock == INVALID_SOCKET)
 	{
 #if defined(WIN32) || defined(WIN64)
@@ -106,7 +108,9 @@ void		ConnectionManager::fillFdSet()
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); )
 		if (!this->_clientIt->second->toKill())
 		{
+      this->_maxFdVal = (this->_clientIt->first > this->_maxFdVal ? this->_clientIt->first : this->_maxFdVal);
 			FD_SET(this->_clientIt->first, &this->_read);
+      FD_SET(this->_clientIt->first, &this->_write);
 			++this->_clientIt;
 		}
 		else
@@ -120,18 +124,19 @@ void		ConnectionManager::fillFdSet()
 
 void		ConnectionManager::doSelect()
 {
-	select(NULL, &this->_read, &this->_write, NULL, NULL);
+	select(this->_maxFdVal + 1, &this->_read, &this->_write, NULL, &this->_selectTime);
 }
 
 void		ConnectionManager::fdProcess()
 {
 	//Read Part
-		//Main Socket for connection attempts
-	if (FD_ISSET(this->_sock, &this->_read))
-		this->cmNewClient();
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); ++this->_clientIt)
 		if (FD_ISSET(this->_clientIt->first, &this->_read))
 			this->_clientIt->second->setStatus(FETCH);
+  
+  //Main Socket for connection attempts
+  if (FD_ISSET(this->_sock, &this->_read))
+		this->cmNewClient();
 	//Write Part
 
 	//Launch Clients Processing
@@ -149,7 +154,7 @@ void		ConnectionManager::cmNewClient()
 	sizeofClientSrcInf = sizeof(clientSrcInf);
 	clientSocket = accept(this->_sock, &clientSrcInf, &sizeofClientSrcInf);
 	sizeofClientSrcInf = sizeof(clientSrcInfBis);
-	getpeername(clientSocket, (sockaddr *)&clientSrcInfBis, (socklen_t*)&sizeofClientSrcInf); // SOCKADDR -> sockaddr?
+	getpeername(clientSocket, (sockaddr *)&clientSrcInfBis, (socklen_t*)&sizeofClientSrcInf);
 	if(clientSocket == INVALID_SOCKET)
 	  {
 #if defined(WIN32) || defined(WIN64)

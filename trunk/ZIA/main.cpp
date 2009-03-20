@@ -9,7 +9,7 @@ int	main(int ac, char *av[])
   std::cout << "ZIA server Startup..." << std::endl;
   try
     {
-      cm = new ConnectionManager(80);
+      cm = new ConnectionManager(8080);
       while (1)
 	{
 	  cm->fillFdSet();
@@ -17,9 +17,10 @@ int	main(int ac, char *av[])
 	  cm->fdProcess();
 	}
     }
-  catch(char say[])
+  catch(char const say[])
     {
       std::cout << av[0] << ": " << say << std::endl;
       std::cout << "Program Termination." << std::endl;
+      exit(-1);
     }
 }

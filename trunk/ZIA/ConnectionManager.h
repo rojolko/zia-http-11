@@ -37,6 +37,8 @@ private:
 #endif
 	fd_set								_read;
 	fd_set								_write;
+  struct timeval				_selectTime;
+  int										_maxFdVal;
 	std::map<SOCKET, Client*>			_clientList;
 	std::map<SOCKET, Client*>::iterator	_clientIt;
 
