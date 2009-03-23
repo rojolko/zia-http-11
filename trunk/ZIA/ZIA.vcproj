@@ -228,6 +228,10 @@
 			RelativePath=".\ClassDiagram1.cd"
 			>
 		</File>
+		<File
+			RelativePath=".\Makefile"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

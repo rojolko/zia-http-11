@@ -16,9 +16,9 @@ ConnectionManager::ConnectionManager(const int port)
 ConnectionManager::~ConnectionManager(void)
 {
 #if defined(WIN32) || defined(WIN64)
-  WSACleanup();
+	WSACleanup();
 #endif
-  
+
   for (this->_clientIt = this->_clientList.begin(); !this->_clientList.empty(); this->_clientIt = _clientList.begin())
     {
       std::cout << "ConnectionManager Destructor - Erasing Client -> " << this->_clientIt->first << "-"<< this->_clientIt->second->getIp() << std::endl;
@@ -105,12 +105,13 @@ void		ConnectionManager::fillFdSet()
 	//Fill with Main socket
 	FD_SET(this->_sock, &this->_read);
 	//Fill with Clients
+	this->_maxFdVal = this->_sock;
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); )
 		if (!this->_clientIt->second->toKill())
 		{
-      this->_maxFdVal = (this->_clientIt->first > this->_maxFdVal ? this->_clientIt->first : this->_maxFdVal);
+			this->_maxFdVal = ((this->_clientIt->first) > (this->_maxFdVal) ? (this->_clientIt->first) : (this->_maxFdVal));
 			FD_SET(this->_clientIt->first, &this->_read);
-      FD_SET(this->_clientIt->first, &this->_write);
+			FD_SET(this->_clientIt->first, &this->_write);
 			++this->_clientIt;
 		}
 		else
