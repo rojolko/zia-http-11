@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CLIENT_H_
+#define _CLIENT_H_
 
 #if defined(WIN32) || defined(WIN64)
 
@@ -21,16 +22,10 @@
 #include <string>
 #include <iostream>
 
-#define	CL_BUFF_SIZE	512
+#include "Request.h"
+#include "cl_stat_enum.h"
 
-enum	CL_STAT
-{
-	CONNECT,
-	IDLE,
-	FETCH,
-	PROCESS,
-	CLOSE
-};
+//#define	CL_BUFF_SIZE	512
 
 class Client
 {
@@ -40,12 +35,12 @@ private:
 	SOCKADDR_IN	_clientSrcInfIn;
 
 	CL_STAT		_status;
-//	Request		_request;
+	Request		*_request;
 //	Response	_response;
 //	Timer			_timer;
 	int*			_readQueue;
 	int*			_writeQueue;
-	char			_readBuff[CL_BUFF_SIZE];
+//	char			_readBuff[CL_BUFF_SIZE];
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client(void);
@@ -62,3 +57,5 @@ public:
 	void	setStatus(enum CL_STAT value);
 	bool	toKill();
 };
+
+#endif
