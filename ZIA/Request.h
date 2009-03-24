@@ -23,17 +23,16 @@
 
 class Request
 {
-	SOCKET							_sock;
-	int									_retVal;
-	char*								_readBuff;
+	SOCKET				_sock;
+	int					_retVal;
 	std::ostringstream	_buffStream;
 public:
 	Request(SOCKET sock);
 	~Request(void);
 
-	CL_STAT				processRequest();
+	CL_STAT			processRequest();
 	std::string		getRequest();
-	int						getRetVal();
+	int				getRetVal();
 };
 
 #endif

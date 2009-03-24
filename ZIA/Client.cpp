@@ -6,6 +6,7 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 	this->_sock = sock;
 	this->_clientSrcInf = srcInf;
 	this->_clientSrcInfIn = srcInfIn;
+	this->_request = new Request(sock);
 }
 
 Client::~Client(void)
@@ -26,15 +27,14 @@ void	Client::setStatus(enum CL_STAT value)
 void	Client::process()
 {
 	int		readRet;
-	//C'est moche I know :D
-	this->_request = new Request(this->_sock);
+	//C'est moche I know :/
 
 	if (this->_status != IDLE && this->_status != CLOSE)
 	{
 		if (this->_status == FETCH)
 		{
 			std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
-			//Launch Read on the client's socket
+			// Launch Read on the client's socket
 			this->_status = this->_request->processRequest();
 			// readRet = recv(this->_sock, this->_readBuff, CL_BUFF_SIZE - 1, 0);
 			// this->_readBuff[readRet] = '\0';
@@ -60,8 +60,10 @@ void	Client::process()
 			std::cout << WSAGetLastError() << std::endl;
 			std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
 		}
+		if (this->_status == IDLE)
+			;
+		//	delete this->_request;
 	}
-	delete this->_request;
 }
 
 bool Client::toKill()
