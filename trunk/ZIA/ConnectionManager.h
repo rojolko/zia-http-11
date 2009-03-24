@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CONNECTIONMANAGER_H_
+#define _CONNECTIONMANAGER_H_
 
 #if defined(WIN32) || defined(WIN64)
 
@@ -59,3 +60,5 @@ public:
 	void		fdProcess();
 	
 };
+
+#endif
