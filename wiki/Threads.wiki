@@ -11,14 +11,18 @@ void function()
 {
 HANDLE h;
 Thread *t = new Thread();
+
 try
 {
  h = t->tStart(functest);
 }
+
 catch(char say[])
 {
   std::cout << "Exception :" << say << std::endl;
   std::cout << "Program Termination." << std::endl;
  }
 }
-Where Functest is the startroutine of your newly created Thread. Ressource sharing is on the work and mutexs too.
+
+
+Where functest is the startroutine of your newly created Thread. Ressource sharing is on the work and mutexs too.
