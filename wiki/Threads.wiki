@@ -1,0 +1,22 @@
+#How to use the thread class in the Zia.
+
+= Introduction =
+
+Using Threads is simple. The only thing you need is to create a Handle, and an instance of the class thread. See details below.
+
+
+= Details =
+
+HANDLE h;
+Thread *t = new Thread();
+try
+{
+ h = t->tStart(functest);
+}
+catch(char say[])
+{
+  std::cout << "Exception :" << say << std::endl;
+  std::cout << "Program Termination." << std::endl;
+ }
+
+Where Functest is the startroutine of your newly created Thread. Ressource sharing is on the work and mutexs too.
