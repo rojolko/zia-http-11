@@ -10,12 +10,8 @@ Thread::~Thread()
   if (tExec)
     {
 #if defined(WIN32) || defined(WIN64)
-      int resultat;
-      resultat = CloseHandle( _handle );
-      if( resultat == 0 )
-	{
-	  std::cout << std::endl << "Erreur avec CloseHandle()! Error = " << GetLastError() << "." << std::endl;
-	}
+      if(!CloseHandle( _handle ))
+		std::cout << "Erreur avec CloseHandle()! Error = " << GetLastError() << "." << std::endl;
 #else
       pthread_detach( _handle );
 #endif
@@ -27,18 +23,15 @@ Thread::~Thread()
 
 // Initialisation des Threads
 
-HANDLE Thread::tStart(void *f, void *param)
+HANDLE Thread::tStart(void (*f)())
 {
   if (!this->tExec)
     {
 #if defined(WIN32) || defined(WIN64)
-      _handle = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void*))f, (LPVOID)param, 0, &_identThreadW32);
-      
-      // exception
+		_handle = (HANDLE)_beginthreadex(NULL, 0, (unsigned int(__stdcall*)(void*))f, 0, 0, &_identThreadW32);
+       // exception
       if (!_handle)
-	{
-	  std::cout << "Probleme au beginthreadex" << std::endl;
-	}
+		throw("Thread Creation Problem.");
       return (_handle);
 #else
       int valeur = pthread_create( &_handle, 0, ThreadLauncher, this );
