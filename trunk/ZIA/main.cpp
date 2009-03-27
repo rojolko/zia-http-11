@@ -1,6 +1,8 @@
 #include "ConnectionManager.h"
 #include <iostream>
 
+void	ThreadExample();
+
 int	main(int ac, char *av[])
 {
   ac = ac;
@@ -25,4 +27,4 @@ int	main(int ac, char *av[])
       exit(-1);
     }
 }
->>>>>>> .r10
+
