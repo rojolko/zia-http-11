@@ -10,6 +10,7 @@ int	main(int ac, char *av[])
   try
     {
       cm = new ConnectionManager(8080);
+	  ThreadExample();
       while (1)
 	{
 	  cm->fillFdSet();
@@ -24,3 +25,4 @@ int	main(int ac, char *av[])
       exit(-1);
     }
 }
+>>>>>>> .r10

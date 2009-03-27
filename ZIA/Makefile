@@ -3,8 +3,9 @@ SRC =		Client.cpp \
 		main.cpp \
 		Request.cpp \
 		Response.cpp \
-		Timer.cpp
-##		Thread.cpp
+		Timer.cpp \
+		Thread.cpp \
+		utilisationthread.cpp
 
 OBJ =		$(SRC:.cpp=.o)
 

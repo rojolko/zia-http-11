@@ -184,11 +184,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Mutex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Request.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Response.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\utilisationthread.cpp"
 				>
 			</File>
 		</Filter>
@@ -210,11 +222,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Mutex.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Request.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Response.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Thread.h"
 				>
 			</File>
 			<File

@@ -2,7 +2,9 @@
 
 #if defined(WIN32) || defined(WIN64)
 
-// # include <process.h> ?
+#include <process.h> 
+#include <Windows.h>
+#include <iostream>
 
 #else
 
@@ -36,7 +38,7 @@ public:
 
 	// Methods
 #if defined(WIN32) || defined(WIN64)
-	HANDLE	tStart(void *, void *);
+	HANDLE	tStart(void (*f)());
 #else
 	pthread_t tStart(void*,void*);
 #endif
