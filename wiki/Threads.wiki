@@ -7,6 +7,8 @@ Using Threads is simple. The only thing you need is to create a Handle, and an i
 
 = Details =
 
+void function()
+{
 HANDLE h;
 Thread *t = new Thread();
 try
@@ -18,5 +20,5 @@ catch(char say[])
   std::cout << "Exception :" << say << std::endl;
   std::cout << "Program Termination." << std::endl;
  }
-
+}
 Where Functest is the startroutine of your newly created Thread. Ressource sharing is on the work and mutexs too.
