@@ -51,7 +51,7 @@ public:
 	
 	void	canWrite(int*);
 	void	canRead(int*);
-
+	void	allocRequest();
 	const char	*getIp();
 
 	void	setStatus(enum CL_STAT value);

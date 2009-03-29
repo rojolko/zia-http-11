@@ -14,6 +14,9 @@
 
 #endif
 
+#include <map>
+#include <string>
+
 #include <iostream>
 #include <sstream>
 
@@ -26,6 +29,14 @@ class Request
 	SOCKET				_sock;
 	int					_retVal;
 	std::ostringstream	_buffStream;
+
+	std::string			_requestType;
+	std::string			_askedPath;
+	std::string			_requestVers;
+	std::map<std::string, std::string>	_varList;
+
+	void	parseRequestTypePathVers(std::string &);
+	void	consumeRequest(std::string&, const size_t&);
 public:
 	Request(SOCKET sock);
 	~Request(void);
@@ -33,6 +44,8 @@ public:
 	CL_STAT			processRequest();
 	std::string		getRequest();
 	int				getRetVal();
+
+	void			parseRequest();
 };
 
 #endif
