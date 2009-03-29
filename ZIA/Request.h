@@ -6,11 +6,17 @@
 // WINDBLOWS
 # include <Winsock2.h>
 
+# define C_ENDL	"\r\n"
+# define C_ENDL_SIZE 2
+
 #else
 
 // NUXSME
 # include <sys/socket.h>
 # define SOCKET			int
+
+# define C_ENDL	"\n"
+# define C_ENDL_SIZE 1
 
 #endif
 
@@ -30,13 +36,17 @@ class Request
 	int					_retVal;
 	std::ostringstream	_buffStream;
 
-	std::string			_requestType;
+	std::string			_requestMethod;
 	std::string			_askedPath;
 	std::string			_requestVers;
-	std::map<std::string, std::string>	_varList;
 
-	void	parseRequestTypePathVers(std::string &);
-	void	consumeRequest(std::string&, const size_t&);
+	std::map<std::string, std::string>				_varList;
+	std::map<std::string, std::string>::iterator	_varIt;
+
+	void	parseRequestMethodParthVers(std::string &);
+	void	parseVars(std::string &);
+	void	consumeRequest(std::string &, const size_t &);
+	bool	isValidRequest(std::string &);
 public:
 	Request(SOCKET sock);
 	~Request(void);
@@ -46,6 +56,7 @@ public:
 	int				getRetVal();
 
 	void			parseRequest();
+	void			dumpMPVandVars();
 };
 
 #endif

@@ -46,7 +46,7 @@ void	Client::process()
 		}
 		if (this->_status == PROCESS)
 		{
-			std::cout << "Request from IP:" << this->getIp() << " -> [" << this->_request->getRequest() << "]." << std::endl;
+			std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
 			//Build the response for the client (Review, We could need another state like "Respond")
 			this->_request->parseRequest();
 			this->_status = IDLE;
@@ -58,7 +58,6 @@ void	Client::process()
 #else
 			perror("Client closed connection with error : ");
 #endif
-			std::cout << WSAGetLastError() << std::endl;
 			std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
 		}
 		if (this->_status == IDLE)
