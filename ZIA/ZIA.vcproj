@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="ZIA"
 	ProjectGUID="{20971B89-F13C-402A-9CBD-0DEE24E9283D}"
 	RootNamespace="ZIA"
@@ -184,10 +184,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Mutex.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Request.cpp"
 				>
 			</File>
@@ -219,10 +215,6 @@
 			</File>
 			<File
 				RelativePath=".\ConnectionManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Mutex.h"
 				>
 			</File>
 			<File
