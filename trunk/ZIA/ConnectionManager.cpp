@@ -109,7 +109,7 @@ void		ConnectionManager::fillFdSet()
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); )
 		if (!this->_clientIt->second->toKill())
 		{
-			this->_maxFdVal = ((this->_clientIt->first) > (this->_maxFdVal) ? (this->_clientIt->first) : (this->_maxFdVal));
+			this->_maxFdVal = (((this->_clientIt->first) > (this->_maxFdVal)) ? (this->_clientIt->first) : (this->_maxFdVal));
 			FD_SET(this->_clientIt->first, &this->_read);
 			FD_SET(this->_clientIt->first, &this->_write);
 			++this->_clientIt;
