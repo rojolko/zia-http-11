@@ -6,17 +6,11 @@
 // WINDBLOWS
 # include <Winsock2.h>
 
-# define C_ENDL	"\r\n"
-# define C_ENDL_SIZE 2
-
 #else
 
 // NUXSME
 # include <sys/socket.h>
 # define SOCKET			int
-
-# define C_ENDL	"\n"
-# define C_ENDL_SIZE 1
 
 #endif
 
@@ -29,6 +23,9 @@
 #include "cl_stat_enum.h"
 
 #define RQ_BUFF_SIZE 1000000
+
+#define C_ENDL	"\r\n"
+#define C_ENDL_SIZE 2
 
 class Request
 {
