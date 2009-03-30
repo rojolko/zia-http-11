@@ -28,7 +28,7 @@
 
 #include "cl_stat_enum.h"
 
-#define RQ_BUFF_SIZE 512
+#define RQ_BUFF_SIZE 1000000
 
 class Request
 {

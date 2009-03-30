@@ -218,6 +218,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\leaks_tracker.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Request.h"
 				>
 			</File>

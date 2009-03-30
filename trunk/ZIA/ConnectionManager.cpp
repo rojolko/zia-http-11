@@ -9,7 +9,7 @@ ConnectionManager::ConnectionManager(const int port)
   this->cmBind(port);
   this->cmListen();
   this->_selectTime.tv_sec = 0;
-  this->_selectTime.tv_usec = 10;
+  this->_selectTime.tv_usec = 100;
   std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
 }
 
@@ -111,7 +111,8 @@ void		ConnectionManager::fillFdSet()
 		{
 			this->_maxFdVal = (((this->_clientIt->first) > (this->_maxFdVal)) ? (this->_clientIt->first) : (this->_maxFdVal));
 			FD_SET(this->_clientIt->first, &this->_read);
-			FD_SET(this->_clientIt->first, &this->_write);
+			if (this->_clientIt->second->needtoWrite() == true)
+				FD_SET(this->_clientIt->first, &this->_write);
 			++this->_clientIt;
 		}
 		else
