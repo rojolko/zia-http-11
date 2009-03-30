@@ -44,14 +44,14 @@ void	Client::process()
 			this->_status = this->_request->processRequest();
 			std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
 		}
-		if (this->_status == PROCESS)
+		else if (this->_status == PROCESS)
 		{
 			std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
 			//Build the response for the client (Review, We could need another state like "Respond")
 			this->_request->parseRequest();
 			this->_status = IDLE;
 		} 
-		if (this->_status == CLOSE)
+		else if (this->_status == CLOSE)
 		{
 #if defined(WIN32) || defined(WIN64)
 			std::cout << "Client closed connection with error : " << WSAGetLastError() << std::endl;

@@ -46,6 +46,7 @@ public:
 	~Client(void);
 
 	void	process();
+	bool	needtoWrite() {return false;};
 	int*	needWrite();
 	int*	needRead();
 	

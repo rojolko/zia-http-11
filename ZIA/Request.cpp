@@ -16,7 +16,7 @@ Request::~Request(void)
 
 CL_STAT					Request::processRequest()
 {
-	char	readBuff[RQ_BUFF_SIZE];
+	char	*readBuff = new char[RQ_BUFF_SIZE];
 
 	this->_retVal = recv(this->_sock, readBuff, RQ_BUFF_SIZE - 1, 0);
 	// peut etre a modif ...
@@ -26,6 +26,7 @@ CL_STAT					Request::processRequest()
 	// std::cout << "Last BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
 	this->_buffStream << readBuff;
 	// std::cout << "Current BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
+	delete readBuff;
 	return (PROCESS);
 }
 
