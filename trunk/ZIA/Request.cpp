@@ -9,14 +9,14 @@ Request::~Request(void)
 {
 	for (this->_varIt = this->_varList.begin(); !this->_varList.empty(); this->_varIt = _varList.begin())
 	{
-	//	std::cout << "ConnectionManager Destructor - Erasing Var -> \"" << this->_varIt->first << "\"=\""<< this->_varIt->second << "\"" << std::endl;
+		std::cout << "ConnectionManager Destructor - Erasing Var -> \"" << this->_varIt->first << "\"=\""<< this->_varIt->second << "\"" << std::endl;
 		this->_varList.erase(this->_varIt->first);
 	}
 }
 
 CL_STAT					Request::processRequest()
 {
-	char	*readBuff = new char[RQ_BUFF_SIZE];
+	char	readBuff[RQ_BUFF_SIZE];
 
 	this->_retVal = recv(this->_sock, readBuff, RQ_BUFF_SIZE - 1, 0);
 	// peut etre a modif ...
@@ -26,7 +26,6 @@ CL_STAT					Request::processRequest()
 	// std::cout << "Last BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
 	this->_buffStream << readBuff;
 	// std::cout << "Current BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
-	delete readBuff;
 	return (PROCESS);
 }
 
@@ -60,14 +59,14 @@ bool	Request::isValidRequest(std::string &rq)
 	int	disc;
 
 	disc = std::string::npos;
-	if (rq.find("OPTIONS") == disc &&
-		rq.find("GET") == disc &&
-		rq.find("HEAD") == disc &&
-		rq.find("POST") == disc &&
-		rq.find("PUT") == disc &&
-		rq.find("DELETE") == disc &&
-		rq.find("TRACE") == disc &&
-		rq.find("CONNECT") == disc)
+	if (rq.find("OPTIONS ") == disc &&
+		rq.find("GET ") == disc &&
+		rq.find("HEAD ") == disc &&
+		rq.find("POST ") == disc &&
+		rq.find("PUT ") == disc &&
+		rq.find("DELETE ") == disc &&
+		rq.find("TRACE ") == disc &&
+		rq.find("CONNECT ") == disc)
 		return false;
 	return true;
 }

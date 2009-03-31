@@ -13,6 +13,7 @@ Client::~Client(void)
 {
 	if (this->_request != NULL)
 		delete this->_request;
+	closesocket(this->_sock);
 }
 
 const char	*Client::getIp()
@@ -33,35 +34,35 @@ void	Client::allocRequest()
 
 void	Client::process()
 {
-
-	if (this->_status != IDLE && this->_status != CLOSE)
+	if (this->_status == FETCH)
 	{
-		if (this->_status == FETCH)
-		{
-			this->allocRequest();
-			std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
-			// Launch Read on the client's socket
-			this->_status = this->_request->processRequest();
-			std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
-		}
-		else if (this->_status == PROCESS)
-		{
-			std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
-			//Build the response for the client (Review, We could need another state like "Respond")
-			this->_request->parseRequest();
-			this->_status = IDLE;
-		} 
-		else if (this->_status == CLOSE)
-		{
+		this->allocRequest();
+		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
+		// Launch Read on the client's socket
+		this->_status = this->_request->processRequest();
+		std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+	}
+	else if (this->_status == PROCESS)
+	{
+		std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
+		//Build the response for the client (Review, We could need another state like "Respond")
+		this->_request->parseRequest();
+		delete this->_request;
+		this->_request = NULL;
+		std::cout << "Client with IP:" << this->getIp() << " go on state IDLE #" << this->_sock << std::endl;
+		this->_status = IDLE;
+	}
+	if (this->_status == CLOSE)
+	{
 #if defined(WIN32) || defined(WIN64)
-			std::cout << "Client closed connection with error : " << WSAGetLastError() << std::endl;
+		std::cout << "Client closed connection with error : " << WSAGetLastError() << std::endl;
 #else
-			perror("Client closed connection with error : ");
+		perror("Client closed connection with error : ");
 #endif
-			std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
-		}
-		if (this->_status == IDLE)
-			;
+		std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
+	}
+	if (this->_status == IDLE)
+	{
 	}
 }
 

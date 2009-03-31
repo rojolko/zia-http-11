@@ -206,6 +206,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\always.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cl_stat_enum.h"
 				>
 			</File>
@@ -215,10 +219,6 @@
 			</File>
 			<File
 				RelativePath=".\ConnectionManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\leaks_tracker.h"
 				>
 			</File>
 			<File

@@ -25,6 +25,7 @@ ConnectionManager::~ConnectionManager(void)
       delete this->_clientList[this->_clientIt->first];
       this->_clientList.erase(this->_clientIt->first);
     }
+  closesocket(this->_sock);
   std::cout << "ConnectionManager Destroyed." << std::endl;
 }
 
