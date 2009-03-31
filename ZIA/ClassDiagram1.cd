@@ -6,14 +6,14 @@
   <Class Name="ConnectionManager">
     <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAJAAAAIAAAAAAAAAAgQAAAAAAAAACAAAAAo=</HashCode>
+      <HashCode>AAIgAgQkANAAAAKAACAAAAQAAgSBAAACAAAACAAAAAo=</HashCode>
       <FileName>ConnectionManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Client">
     <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAAAIAEAAggACAAQAAgABIAAAAAAAAAAAggABAAAAQ=</HashCode>
+      <HashCode>AEAAAIAkAIgAAAAAQAAgABIAAAAAAEAIAAhgADBAAAQ=</HashCode>
       <FileName>Client.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -32,9 +32,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Request">
-    <Position X="4.25" Y="4.25" Width="1.5" />
+    <Position X="4.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAgAAAAA=</HashCode>
+      <HashCode>AAABgYAMAAQQEAAAAEAAAAAAQgAAwAAAQEIAAgAAAAA=</HashCode>
       <FileName>Request.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -49,7 +49,7 @@
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAEAAAAAAAAAAAAAAAAAgAAAAACAAABAAAAAAAAAAA=</HashCode>
-      <FileName>Client.h</FileName>
+      <FileName>cl_stat_enum.h</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Tahoma" Size="8.25" />
