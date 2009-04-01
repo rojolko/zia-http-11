@@ -1,4 +1,5 @@
 #include "Request.h"
+#include "globals.h"
 
 Request::Request(SOCKET sock) : _buffStream()
 {
@@ -43,10 +44,12 @@ const std::string	&Request::getVers()
 {
 	return this->_requestVers;
 }
+
 const std::string	&Request::getMethod()
 {
 	return this->_requestMethod;
 }
+
 const std::string	&Request::getPath()
 {
 	return this->_askedPath;
@@ -70,18 +73,12 @@ void			Request::parseRequest()
 bool	Request::isValidRequest(std::string &rq)
 {
 	int	disc;
+	int	i;
 
-	disc = std::string::npos;
-	if (rq.find("OPTIONS ") == disc &&
-		rq.find("GET ") == disc &&
-		rq.find("HEAD ") == disc &&
-		rq.find("POST ") == disc &&
-		rq.find("PUT ") == disc &&
-		rq.find("DELETE ") == disc &&
-		rq.find("TRACE ") == disc &&
-		rq.find("CONNECT ") == disc)
-		return false;
-	return true;
+	for (disc = std::string::npos, i = 0; t_Methods[i] != NULL; ++i)
+		if (rq.find(t_Methods[i]) != disc)
+			return true;
+	return false;
 }
 
 void	Request::parseRequestMethodParthVers(std::string &rq)
