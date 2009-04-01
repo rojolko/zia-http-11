@@ -12,7 +12,7 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 
 Client::~Client(void)
 {
-	std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
+//	std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
 	if (this->_request != NULL)
 		delete this->_request;
 	closesocket(this->_sock);
@@ -45,14 +45,14 @@ void	Client::process()
 	if (this->_status == FETCH)
 	{
 		this->allocRequest();
-		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
+//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
 		// Launch Read on the client's socket
 		this->_status = this->_request->processRequest();
-		std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+//		std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
 	}
 	else if (this->_status == PROCESS)
 	{
-		std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
+//		std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
 		//Build the response for the client (Review, We could need another state like "Respond")
 		this->_request->parseRequest();
 
@@ -60,13 +60,13 @@ void	Client::process()
 		///////////////////////   /!\  TEST  START  /!\    ////////////////////////
 		
 		this->allocResponse();
-		this->_response->bufAdd(this->_request->getVers().c_str());
+		this->_response->bufAdd("HTTP/1.1");
 		this->_response->bufAdd(" ");
 		this->_response->bufAdd("200");
 		this->_response->bufAdd(" ");
 		this->_response->bufAdd("OK");
 		this->_response->bufAdd("\r\n");
-		this->_response->bufAdd("Content-Type: text/html; charset=UTF-8\r\nContent-Length: 11\r\nKeep-Alive: timeout=15, max=100\r\nDate: Wed, 01 Apr 2009 02:22:23 +0000\r\n");
+		this->_response->bufAdd("Content-Length: 11\r\n\r\n");
 		this->_response->bufAdd("prout prout");
 		this->_response->setBufReady(true);
 		
@@ -75,16 +75,16 @@ void	Client::process()
 
 		delete this->_request;
 		this->_request = NULL;
-		std::cout << "Client with IP:" << this->getIp() << " go on state IDLE #" << this->_sock << std::endl;
+//		std::cout << "Client with IP:" << this->getIp() << " go on state IDLE #" << this->_sock << std::endl;
 		this->_status = IDLE;
 	}
 	else if (this->_status == RESPONSE)
 	{
-		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
-		std::cout << "Send return = [" << send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0) << "]" << std::endl;
+//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
+		/*std::cout << "Send return = [" << */send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0)/* << "]" << std::endl*/;
 		delete this->_response;
 		this->_response = NULL;
-		this->_status = IDLE;
+		this->_status = CLOSE;
 	}
 	else if (this->_status == CLOSE)
 	{

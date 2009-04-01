@@ -3,7 +3,6 @@
 Response::Response(void)
 {
 	_bufReady = false;
-	std::cout << "New Response : _bufReady = " << _bufReady << std::endl;
 }
 
 Response::~Response(void)

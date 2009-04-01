@@ -10,7 +10,7 @@ Request::~Request(void)
 {
 	for (this->_varIt = this->_varList.begin(); !this->_varList.empty(); this->_varIt = _varList.begin())
 	{
-		std::cout << "ConnectionManager Destructor - Erasing Var -> \"" << this->_varIt->first << "\"=\""<< this->_varIt->second << "\"" << std::endl;
+//		std::cout << "ConnectionManager Destructor - Erasing Var -> \"" << this->_varIt->first << "\"=\""<< this->_varIt->second << "\"" << std::endl;
 		this->_varList.erase(this->_varIt->first);
 	}
 }
@@ -64,7 +64,7 @@ void			Request::parseRequest()
 	{
 		this->parseRequestMethodParthVers(temp);
 		this->parseVars(temp);
-		this->dumpMPVandVars();
+//		this->dumpMPVandVars();
 	}
 	else
 		std::cout << "Bad request" << std::endl;
