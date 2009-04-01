@@ -186,7 +186,7 @@ void		ConnectionManager::allocNewClientInList(SOCKET sock, sockaddr srcInf, SOCK
 	newClient = new Client(sock, srcInf, srcInfIn);
 	this->_clientIt = this->_clientList.end();
 	this->_clientList.insert(std::pair<SOCKET, Client*>(sock, newClient));
-	//	this->dumpClientsData();
+	this->dumpClientsData();
 }
 
 void	ConnectionManager::dumpClientsData()

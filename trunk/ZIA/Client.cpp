@@ -14,8 +14,8 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 Client::~Client()
 {
 	std::cout << "Client with IP:" << this->getIp() << " closed connection after " << this->_timer.getTicks() << "ms on socket #" << this->_sock << std::endl;
-	if (this->_request != NULL)
-		delete this->_request;
+	this->delRequest();
+	this->delResponse();
 	closesocket(this->_sock);
 }
 
@@ -41,6 +41,24 @@ void	Client::allocResponse()
 		this->_response = new Response();
 }
 
+void	Client::delRequest()
+{
+	if (this->_request != NULL)
+	{
+		delete this->_request;
+		this->_request = NULL;
+	}
+}
+
+void	Client::delResponse()
+{
+	if (this->_response != NULL)
+	{
+		delete this->_response;
+		this->_response = NULL;
+	}
+}
+
 void	Client::process()
 {
 	if (this->_status == FETCH)
@@ -61,14 +79,19 @@ void	Client::process()
 		///////////////////////   /!\  TEST  START  /!\    ////////////////////////
 
 		this->allocResponse();
-		this->_response->bufAdd("HTTP/1.1 200 OK\r\nContent-Length: 11\r\n\r\nprout prout");
+		//Create Status Line -> Method SP Request-URI SP HTTP-Version CRLF
+
+		this->_response->bufAdd("HTTP/1.1 200 OK\r\n");
+		this->_response->bufAdd("Content-Length: 74\r\n");
+		this->_response->bufAdd("Connection: close\r\n");
+		this->_response->bufAdd("Content-Type: text/html; charset=utf-8\r\n");
+		this->_response->bufAdd("\r\n");
+		this->_response->bufAdd("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
 		this->_response->setBufReady(true);
 
 		///////////////////////   /!\  TEST  END  /!\    ////////////////////////
 
 
-		delete this->_request;
-		this->_request = NULL;
 		//		std::cout << "Client with IP:" << this->getIp() << " go on state IDLE #" << this->_sock << std::endl;
 		this->_status = IDLE;
 	}
@@ -76,9 +99,11 @@ void	Client::process()
 	{
 		//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
 		/*std::cout << "Send return = [" << */send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0)/* << "]" << std::endl*/;
-		delete this->_response;
-		this->_response = NULL;
-		this->_status = IDLE;
+
+		this->delRequest();
+		this->delResponse();
+		//Depend of Connection Header and server conf
+		this->_status = IDLE;//
 	}
 	else if (this->_status == CLOSE)
 	{
@@ -86,6 +111,7 @@ void	Client::process()
 	}
 	else if (this->_status == IDLE)
 	{
+		//std::cout << "Client with IP:" << this->getIp() << " is IDLE after " << this->_timer.getTicks() << "ms on socket #" << this->_sock << std::endl;
 	}
 
 }
