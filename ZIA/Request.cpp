@@ -1,7 +1,7 @@
 #include "Request.h"
 #include "globals.h"
 
-Request::Request(SOCKET sock) : _buffStream()
+Request::Request(SOCKET sock) : _bufStream()
 {
 	_sock = sock;
 }
@@ -25,14 +25,14 @@ CL_STAT					Request::processRequest()
 		return (CLOSE);
 	readBuff[this->_retVal] = 0;
 	// std::cout << "Last BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
-	this->_buffStream << readBuff;
+	this->_bufStream << readBuff;
 	// std::cout << "Current BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
 	return (PROCESS);
 }
 
 std::string			Request::getRequest()
 {
-	return (this->_buffStream.str());
+	return (this->_bufStream.str());
 }
 
 int							Request::getRetVal()
@@ -59,7 +59,7 @@ void			Request::parseRequest()
 {
 	std::string	temp;
 
-	temp = this->_buffStream.str();
+	temp = this->_bufStream.str();
 	if (this->isValidRequest(temp))
 	{
 		this->parseRequestMethodParthVers(temp);

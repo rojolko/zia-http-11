@@ -134,11 +134,14 @@ void		ConnectionManager::fdProcess()
 {
 	//Read Part
 	for (this->_clientIt = this->_clientList.begin(); this->_clientIt != this->_clientList.end(); ++this->_clientIt)
+	{
 		if (FD_ISSET(this->_clientIt->first, &this->_read))
 			this->_clientIt->second->setStatus(FETCH);
-  
-  //Main Socket for connection attempts
-  if (FD_ISSET(this->_sock, &this->_read))
+		if (FD_ISSET(this->_clientIt->first, &this->_write))
+			this->_clientIt->second->setStatus(RESPONSE);
+	}
+  	//Main Socket for connection attempts
+	if (FD_ISSET(this->_sock, &this->_read))
 		this->cmNewClient();
 	//Write Part
 

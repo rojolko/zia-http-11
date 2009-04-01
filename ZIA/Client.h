@@ -23,6 +23,7 @@
 #include <iostream>
 
 #include "Request.h"
+#include "Response.h"
 #include "cl_stat_enum.h"
 
 //#define	CL_BUFF_SIZE	512
@@ -36,7 +37,7 @@ private:
 
 	CL_STAT		_status;
 	Request		*_request;
-//	Response	_response;
+	Response	*_response;
 //	Timer			_timer;
 	int*			_readQueue;
 	int*			_writeQueue;
@@ -46,13 +47,14 @@ public:
 	~Client(void);
 
 	void	process();
-	bool	needtoWrite() {return false;};
+	bool	needtoWrite();
 	int*	needWrite();
 	int*	needRead();
 	
 	void	canWrite(int*);
 	void	canRead(int*);
 	void	allocRequest();
+	void	allocResponse();
 	const char	*getIp();
 
 	void	setStatus(enum CL_STAT value);
