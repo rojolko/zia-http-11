@@ -222,6 +222,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\globals.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Request.h"
 				>
 			</File>
