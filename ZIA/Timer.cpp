@@ -14,11 +14,16 @@ Timer::~Timer()
 	;
 }
 
+const clock_t	Timer::tickTac()
+{
+	return clock() * TICK_FACTOR_MS;
+}
+
 void	Timer::start()
 {
 	this->_started = true;
 	this->_paused = false;
-	this->_startTicks = this->getTicks();
+	this->_startTicks = this->tickTac();
 }
 
 void	Timer::stop()
@@ -37,20 +42,18 @@ bool	Timer::isPaused()
 	return (this->_paused);
 }
 
-int	Timer::getTicks()
+const clock_t	Timer::getTicks()
 {
-  if(this->_started == true)
-    {
-      if(this->_paused == true)
-	{
-	  return this->_pausedTicks;
-	}
-    }
-  else
-    {
-      return this->getTicks() - this->_startTicks;
-    }
-  return 0;
+	if(this->_started == true)
+		if(this->_paused == true)
+		{
+			return this->_pausedTicks;
+		}
+		else
+		{
+			return this->tickTac() - this->_startTicks;
+		}
+		return 0;
 }
 
 void	Timer::pause()
@@ -58,7 +61,7 @@ void	Timer::pause()
 	if((this->_started == true) && (this->_paused == false))
 	{
 		this->_paused = true;
-		this->_pausedTicks = this->getTicks() - this->_startTicks;
+		this->_pausedTicks = this->tickTac() - this->_startTicks;
 	}
 }
 
@@ -67,7 +70,7 @@ void Timer::unPause()
 	if(this->_paused == true)
 	{
 		this->_paused = false;
-		this->_startTicks = this->getTicks() - this->_pausedTicks;
+		this->_startTicks = this->tickTac() - this->_pausedTicks;
 		this->_pausedTicks = 0;
 	}
 }
