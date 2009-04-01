@@ -62,7 +62,7 @@ void			Request::parseRequest()
 	temp = this->_bufStream.str();
 	if (this->isValidRequest(temp))
 	{
-		this->parseRequestMethodParthVers(temp);
+		this->parseRequestMethodPathVers(temp);
 		this->parseVars(temp);
 		this->dumpMPVandVars();
 	}
@@ -81,7 +81,7 @@ bool	Request::isValidRequest(std::string &rq)
 	return false;
 }
 
-void	Request::parseRequestMethodParthVers(std::string &rq)
+void	Request::parseRequestMethodPathVers(std::string &rq)
 {
 	//Primary Cut of the HttpRequest to get Request Type, Path, and Version.
 	size_t	first_endl;

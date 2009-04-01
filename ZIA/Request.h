@@ -40,7 +40,7 @@ class Request
 	std::map<std::string, std::string>				_varList;
 	std::map<std::string, std::string>::iterator	_varIt;
 
-	void	parseRequestMethodParthVers(std::string &);
+	void	parseRequestMethodPathVers(std::string &);
 	void	parseVars(std::string &);
 	void	consumeRequest(std::string &, const size_t &);
 	bool	isValidRequest(std::string &);

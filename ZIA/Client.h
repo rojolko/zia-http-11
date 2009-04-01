@@ -55,6 +55,8 @@ public:
 	void		canRead(int*);
 	void		allocRequest();
 	void		allocResponse();
+	void		delRequest();
+	void		delResponse();
 	const char	*getIp();
 
 	void		setStatus(enum CL_STAT value);
