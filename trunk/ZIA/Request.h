@@ -31,7 +31,7 @@ class Request
 {
 	SOCKET				_sock;
 	int					_retVal;
-	std::ostringstream	_buffStream;
+	std::ostringstream	_bufStream;
 
 	std::string			_requestMethod;
 	std::string			_askedPath;

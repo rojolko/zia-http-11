@@ -7,10 +7,12 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 	this->_clientSrcInf = srcInf;
 	this->_clientSrcInfIn = srcInfIn;
 	this->_request = NULL;
+	this->_response = NULL;
 }
 
 Client::~Client(void)
 {
+	std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
 	if (this->_request != NULL)
 		delete this->_request;
 	closesocket(this->_sock);
@@ -32,6 +34,12 @@ void	Client::allocRequest()
 		this->_request = new Request(this->_sock);
 }
 
+void	Client::allocResponse()
+{
+	if (this->_response == NULL)
+		this->_response = new Response();
+}
+
 void	Client::process()
 {
 	if (this->_status == FETCH)
@@ -47,23 +55,44 @@ void	Client::process()
 		std::cout << "Request from IP:" << this->getIp() <</* " -> [" << this->_request->getRequest() << "]." <<*/ std::endl;
 		//Build the response for the client (Review, We could need another state like "Respond")
 		this->_request->parseRequest();
+
+
+		///////////////////////   /!\  TEST  START  /!\    ////////////////////////
+		
+		this->allocResponse();
+		this->_response->bufAdd(this->_request->getVers().c_str());
+		this->_response->bufAdd(" ");
+		this->_response->bufAdd("200");
+		this->_response->bufAdd(" ");
+		this->_response->bufAdd("OK");
+		this->_response->bufAdd("\r\n");
+		this->_response->bufAdd("Content-Type: text/html; charset=UTF-8\r\nContent-Length: 11\r\nKeep-Alive: timeout=15, max=100\r\nDate: Wed, 01 Apr 2009 02:22:23 +0000\r\n");
+		this->_response->bufAdd("prout prout");
+		this->_response->setBufReady(true);
+		
+		///////////////////////   /!\  TEST  END  /!\    ////////////////////////
+
+
 		delete this->_request;
 		this->_request = NULL;
 		std::cout << "Client with IP:" << this->getIp() << " go on state IDLE #" << this->_sock << std::endl;
 		this->_status = IDLE;
 	}
-	if (this->_status == CLOSE)
+	else if (this->_status == RESPONSE)
 	{
-#if defined(WIN32) || defined(WIN64)
-		std::cout << "Client closed connection with error : " << WSAGetLastError() << std::endl;
-#else
-		perror("Client closed connection with error : ");
-#endif
-		std::cout << "Client with IP:" << this->getIp() << " closed connection on socket #" << this->_sock << std::endl;
+		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
+		std::cout << "Send return = [" << send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0) << "]" << std::endl;
+		delete this->_response;
+		this->_response = NULL;
+		this->_status = IDLE;
 	}
-	if (this->_status == IDLE)
+	else if (this->_status == CLOSE)
 	{
 	}
+	else if (this->_status == IDLE)
+	{
+	}
+
 }
 
 bool Client::toKill()
@@ -72,4 +101,11 @@ bool Client::toKill()
 		return true;
 	else
 		return false;
+}
+
+bool	Client::needtoWrite()
+{
+	if (this->_response == NULL)
+		return false;
+	return this->_response->getBufReady();
 }

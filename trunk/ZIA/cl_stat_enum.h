@@ -7,6 +7,7 @@ enum	CL_STAT
 	IDLE,
 	FETCH,
 	PROCESS,
+	RESPONSE,
 	CLOSE
 };
 
