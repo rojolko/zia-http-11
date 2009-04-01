@@ -25,7 +25,7 @@
 #include "Request.h"
 #include "Response.h"
 #include "cl_stat_enum.h"
-
+#include "Timer.h"
 //#define	CL_BUFF_SIZE	512
 
 class Client
@@ -38,27 +38,27 @@ private:
 	CL_STAT		_status;
 	Request		*_request;
 	Response	*_response;
-//	Timer			_timer;
-	int*			_readQueue;
-	int*			_writeQueue;
-//	char			_readBuff[CL_BUFF_SIZE];
+	Timer		_timer;
+	int*		_readQueue;
+	int*		_writeQueue;
+	//	char			_readBuff[CL_BUFF_SIZE];
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
-	~Client(void);
+	~Client();
 
-	void	process();
-	bool	needtoWrite();
-	int*	needWrite();
-	int*	needRead();
-	
-	void	canWrite(int*);
-	void	canRead(int*);
-	void	allocRequest();
-	void	allocResponse();
+	void		process();
+	bool		needtoWrite();
+	int*		needWrite();
+	int*		needRead();
+
+	void		canWrite(int*);
+	void		canRead(int*);
+	void		allocRequest();
+	void		allocResponse();
 	const char	*getIp();
 
-	void	setStatus(enum CL_STAT value);
-	bool	toKill();
+	void		setStatus(enum CL_STAT value);
+	bool		toKill();
 };
 
 #endif

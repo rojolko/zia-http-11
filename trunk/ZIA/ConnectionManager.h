@@ -39,7 +39,7 @@ private:
 	fd_set								_read;
 	fd_set								_write;
 	struct timeval						_selectTime;
- 	SOCKET								_maxFdVal;
+	SOCKET								_maxFdVal;
 	std::map<SOCKET, Client*>			_clientList;
 	std::map<SOCKET, Client*>::iterator	_clientIt;
 
@@ -58,7 +58,7 @@ public:
 	void		fillFdSet();
 	void		doSelect();
 	void		fdProcess();
-	
+
 };
 
 #endif
