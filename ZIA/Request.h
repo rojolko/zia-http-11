@@ -54,6 +54,9 @@ public:
 
 	void			parseRequest();
 	void			dumpMPVandVars();
+	const std::string	&getVers();
+	const std::string	&getMethod();
+	const std::string	&getPath();
 };
 
 #endif

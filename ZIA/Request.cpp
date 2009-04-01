@@ -39,6 +39,19 @@ int							Request::getRetVal()
 	return this->_retVal;
 }
 
+const std::string	&Request::getVers()
+{
+	return this->_requestVers;
+}
+const std::string	&Request::getMethod()
+{
+	return this->_requestMethod;
+}
+const std::string	&Request::getPath()
+{
+	return this->_askedPath;
+}
+
 void			Request::parseRequest()
 {
 	std::string	temp;
