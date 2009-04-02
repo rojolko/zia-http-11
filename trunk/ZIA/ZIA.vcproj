@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(ProjectDir)\nnapi"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -245,6 +246,70 @@
 				RelativePath=".\Timer.h"
 				>
 			</File>
+			<Filter
+				Name="NNApi"
+				>
+				<File
+					RelativePath=".\nnapi\IModule.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleClient.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleConfig.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleDoClose.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleDoExec.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleDoRead.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleDoSend.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleOnAccept.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleOnClose.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleOnRead.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleOnSend.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleRequest.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleResponse.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleSpecificExtension.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\nnapi\IModuleSpecificPort.hpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
