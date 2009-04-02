@@ -9,6 +9,7 @@ namespace				zia
 	class				IModuleOnRead
 	{
 		public:
+			virtual							~IModuleOnRead() {}
 			/**
 			*  Methode appelee pour traiter la requete apres lecture
 			*  @param la requete

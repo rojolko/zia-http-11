@@ -9,11 +9,13 @@ namespace				zia
 	class				IModuleDoClose
 	{
 		public:
+			virtual							~IModuleDoClose() {}
 			/**
 			* cette methode est appelee a la place du close par default sur le socket
 			* @param une reference sur une IModuleClient (voir son utilisation)
+			* @return renvoie true si le socket a bien été "close".
 			*/
-			virtual bool	doClose(IModuleClient &) = 0;
+			virtual bool	doClose(IModuleClient &);
 	};
 }
 

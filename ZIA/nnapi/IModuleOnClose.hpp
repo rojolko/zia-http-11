@@ -9,9 +9,11 @@ namespace				zia
 	class				IModuleOnClose
 	{
 		public:
+			virtual							~IModuleOnClose() {}
 			/**
 			* Cette methode est appelee juste avant le close du socket
 			* @param une interface client (cf IModuleClient)
+			* @return renvoie true si l'action a bien été executé (pour debug).
 			*/
 			virtual bool	onClose(IModuleClient &) = 0;
 	};

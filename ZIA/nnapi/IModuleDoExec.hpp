@@ -14,11 +14,15 @@ namespace				zia
 	class				IModuleDoExec
 	{
 		public:
+			virtual							~IModuleDoExec() {}
 			/**
-			*  Cette methode est appele a la place de l'execution par default des requetes
+			*  Cette methode est appele entre OnRead et OnSend
+			*  Elle permet par exemple d'executer un script CGI puis de generer une reponse.
+			*  Attention : il n'y a plus de DoSend a faire. La reponse suit le chemin classique
+			*              de l'execution ( DoExec -> OnSend -> DoSend )
 			*  @param une interface sur la requete (cf IModuleRequest)
 			*  @param une interface sur le client (cf IModuleClient)
-			*  @param une interface sur le send (cf IModuleDoSend)
+			*  @param une interface sur la reponse a remplir (cf IModuleResponse)
 			*  @return un boleen (true si l'execution s'est bien passee)
 			*/
 			virtual bool	doExec(IModuleRequest &, IModuleClient &, IModuleResponse &) = 0;

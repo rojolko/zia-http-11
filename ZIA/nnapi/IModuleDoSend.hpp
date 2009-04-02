@@ -15,6 +15,7 @@ namespace zia
 	class				IModuleDoSend
 	{
 		public:
+			virtual							~IModuleDoSend() {}
 			/**
 			*  Methode appelee pour ecrire sur le socket client
 			*  @param informations du client

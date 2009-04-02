@@ -9,6 +9,7 @@ namespace				zia
 	class				IModuleOnAccept
 	{
 		public:
+			virtual							~IModuleOnAccept() {}
 			/**
 			*  Methode appelee lors de l'acceptation d'un nouveau client
 			*  @param une interface sur le client (cf IModuleClient)

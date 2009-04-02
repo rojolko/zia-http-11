@@ -15,6 +15,7 @@ namespace				zia
 	class				IModuleSpecificExtension
 	{
 		public:
+			virtual							~IModuleSpecificExtension() {}
 			/**
 			*  Defini les extensions specifiques.
 			*  @param Reference vers la liste a remplir.
