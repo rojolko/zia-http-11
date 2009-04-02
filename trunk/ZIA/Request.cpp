@@ -1,7 +1,7 @@
 #include "Request.h"
 #include "globals.h"
 
-Request::Request(SOCKET sock) : _bufStream()
+Request::Request(SOCKET sock)
 {
 	_sock = sock;
 }
@@ -25,14 +25,14 @@ CL_STAT					Request::processRequest()
 		return (CLOSE);
 	readBuff[this->_retVal] = 0;
 	// std::cout << "Last BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
-	this->_bufStream << readBuff;
+	this->_request.insert(this->_request.length(), readBuff, strlen(readBuff));
 	// std::cout << "Current BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
 	return (PROCESS);
 }
 
 std::string			Request::getRequest()
 {
-	return (this->_bufStream.str());
+	return (this->_request);
 }
 
 int							Request::getRetVal()
@@ -57,9 +57,9 @@ const std::string	&Request::getPath()
 
 void			Request::parseRequest()
 {
-	std::cout << "Flux Entrant: {" << this->_bufStream.str() << "}" << std::endl;
-	std::cout << "Size BuffStream = " << this->_bufStream.str().length() << std::endl;
-	this->_temp = this->_bufStream.str();
+	std::cout << "Flux Entrant: {" << this->_request << "}" << std::endl;
+	std::cout << "Size Request = " << this->_request.length() << std::endl;
+	this->_temp = this->_request;
 	if (this->isValidRequest())
 	{
 		this->parseRequestMethodPathVers();

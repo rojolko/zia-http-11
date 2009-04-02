@@ -12,12 +12,12 @@ Response::~Response(void)
 
 void	Response::bufAdd(const char *str)
 {
-	this->_bufStream << str;
+	this->_response.insert(this->_response.length(), str, strlen(str));
 }
 
 std::string	Response::getBuf()
 {
-	return this->_bufStream.str();
+	return this->_response;
 }
 
 void	Response::setBufReady(const bool br)
