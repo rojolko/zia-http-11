@@ -27,6 +27,7 @@ t_statcde	t_SatusCode[]=
 	{304, "Not Modified"},
 	{305, "Use Proxy"},
 	{307, "Temporary Redirect"},
+
 	{400, "Bad Request"},
 	{401, "Unauthorized"},
 	{402, "Payment Required"},
@@ -34,8 +35,7 @@ t_statcde	t_SatusCode[]=
 	{404, "Not Found"},
 	{405, "Method Not Allowed"},
 	{406, "Not Acceptable"},
-
-	{407, "HTTP Version not supported"},
+	{407, "Proxy Authentication Required"},
 	{408, "Request Time-out"},
 	{409, "Conflict"},
 	{410, "Gone"},
