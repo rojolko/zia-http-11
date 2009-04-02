@@ -25,7 +25,7 @@ CL_STAT					Request::processRequest()
 		return (CLOSE);
 	readBuff[this->_retVal] = 0;
 	// std::cout << "Last BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
-	this->_request.insert(this->_request.length(), readBuff, strlen(readBuff));
+	this->_request.insert(this->_request.length(), readBuff, this->_retVal);
 	// std::cout << "Current BuffStream : [" << this->_buffStream.str() << "]" << std::endl;
 	return (PROCESS);
 }
@@ -57,7 +57,7 @@ const std::string	&Request::getPath()
 
 void			Request::parseRequest()
 {
-	std::cout << "Flux Entrant: {" << this->_request << "}" << std::endl;
+	//std::cout << "Flux Entrant: {" << this->_request << "}" << std::endl;
 	std::cout << "Size Request = " << this->_request.length() << std::endl;
 	this->_temp = this->_request;
 	if (this->isValidRequest())
