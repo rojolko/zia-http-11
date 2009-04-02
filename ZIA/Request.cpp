@@ -1,6 +1,10 @@
 #include "Request.h"
 #include "globals.h"
 
+Request::Request(void)
+{
+}
+
 Request::Request(SOCKET sock)
 {
 	_sock = sock;
@@ -38,21 +42,6 @@ std::string			Request::getRequest()
 int							Request::getRetVal()
 {
 	return this->_retVal;
-}
-
-const std::string	&Request::getVers()
-{
-	return this->_requestVers;
-}
-
-const std::string	&Request::getMethod()
-{
-	return this->_requestMethod;
-}
-
-const std::string	&Request::getPath()
-{
-	return this->_askedPath;
 }
 
 void			Request::parseRequest()
@@ -149,4 +138,59 @@ void	Request::dumpMPVandVars()
 	std::cout << "Request Vars Dump :" << std::endl;
 	for (this->_varIt = this->_varList.begin(); this->_varIt != this->_varList.end(); ++this->_varIt)
 		std::cout << "	[" << this->_varIt->first << "]=[" << this->_varIt->second << "]" << std::endl;
+}
+
+const std::map<std::string, std::string>&	Request::getHeaders(void) const
+{
+	return this->_varList;
+}
+
+const std::string&	Request::getContent(void) const
+{
+	return this->_body;
+}
+
+void	Request::setMethod(const std::string &str)
+{
+	this->_requestMethod = str;
+}
+
+void	Request::setURI(const std::string &str)
+{
+	this->_askedPath = str;
+}
+
+void	Request::setVersion(const std::string &str)
+{
+	this->_requestVers = str;
+}
+
+void	Request::setHeaders(const std::map<std::string, std::string> &hmap)
+{
+	this->_varList = hmap;
+}
+
+void	Request::setContent(const std::string &str)
+{
+	this->_body = str;
+}
+
+void	Request::setHeader(const std::string& key, const std::string &value)
+{
+	this->_varList.insert(std::pair<std::string, std::string>(key, value));
+}
+
+const std::string&	Request::getVersion(void) const
+{
+	return this->_requestVers;
+}
+
+const std::string&	Request::getMethod(void) const
+{
+	return this->_requestMethod;
+}
+
+const std::string&	Request::getURI(void) const
+{
+	return this->_askedPath;
 }
