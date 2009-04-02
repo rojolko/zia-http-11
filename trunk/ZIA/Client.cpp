@@ -81,6 +81,17 @@ void	Client::process()
 		this->allocResponse();
 		//Create Status Line -> Method SP Request-URI SP HTTP-Version CRLF
 
+		this->_response->setVersion("HTTP/1.1");
+		this->_response->setCode(200);
+
+		this->_response->setHeader("Content-Length", "74");
+		this->_response->setHeader("Connection", "close");
+		this->_response->setHeader("Content-Type", "text/html; charset=utf-8");
+
+		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+
+		this->_response->isTmpFile(true);
+/*
 		this->_response->bufAdd("HTTP/1.1 200 OK\r\n");
 		this->_response->bufAdd("Content-Length: 74\r\n");
 		this->_response->bufAdd("Connection: close\r\n");
@@ -88,7 +99,7 @@ void	Client::process()
 		this->_response->bufAdd("\r\n");
 		this->_response->bufAdd("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
 		this->_response->setBufReady(true);
-
+*/
 		///////////////////////   /!\  TEST  END  /!\    ////////////////////////
 
 
@@ -98,7 +109,7 @@ void	Client::process()
 	else if (this->_status == RESPONSE)
 	{
 		//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
-		/*std::cout << "Send return = [" << */send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0)/* << "]" << std::endl*/;
+		/*std::cout << "Send return = [" << */send(this->_sock, this->_response->getFullResponse().c_str(), this->_response->getFullResponse().size(), 0)/* << "]" << std::endl*/;
 
 		this->delRequest();
 		this->delResponse();
@@ -128,5 +139,5 @@ bool	Client::needtoWrite()
 {
 	if (this->_response == NULL)
 		return false;
-	return this->_response->getBufReady();
+	return this->_response->isTmpFile();
 }
