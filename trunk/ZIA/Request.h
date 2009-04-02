@@ -32,18 +32,23 @@ class Request
 	SOCKET				_sock;
 	int					_retVal;
 	std::ostringstream	_bufStream;
+	std::string			_temp;
 
 	std::string			_requestMethod;
 	std::string			_askedPath;
 	std::string			_requestVers;
+	unsigned int		_statusCode;
 
 	std::map<std::string, std::string>				_varList;
 	std::map<std::string, std::string>::iterator	_varIt;
 
-	void	parseRequestMethodPathVers(std::string &);
-	void	parseVars(std::string &);
-	void	consumeRequest(std::string &, const size_t &);
-	bool	isValidRequest(std::string &);
+	void		parseRequestMethodPathVers();
+	void		parseVars();
+
+	void		consumeRequest(const size_t &);
+	const int	countInRequest(const std::string &);
+
+	bool		isValidRequest();
 public:
 	Request(SOCKET sock);
 	~Request(void);

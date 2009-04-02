@@ -57,48 +57,48 @@ const std::string	&Request::getPath()
 
 void			Request::parseRequest()
 {
-	std::string	temp;
-
-	temp = this->_bufStream.str();
-	if (this->isValidRequest(temp))
+	std::cout << "Flux Entrant: {" << this->_bufStream.str() << "}" << std::endl;
+	std::cout << "Size BuffStream = " << this->_bufStream.str().length() << std::endl;
+	this->_temp = this->_bufStream.str();
+	if (this->isValidRequest())
 	{
-		this->parseRequestMethodPathVers(temp);
-		this->parseVars(temp);
+		this->parseRequestMethodPathVers();
+		this->parseVars();
 		this->dumpMPVandVars();
 	}
 	else
 		std::cout << "Bad request" << std::endl;
 }
 
-bool	Request::isValidRequest(std::string &rq)
+bool	Request::isValidRequest()
 {
 	int	disc;
 	int	i;
 
 	for (disc = std::string::npos, i = 0; t_Methods[i] != NULL; ++i)
-		if (rq.find(t_Methods[i]) != disc)
+		if (this->_temp.find(t_Methods[i]) != disc)
 			return true;
 	return false;
 }
 
-void	Request::parseRequestMethodPathVers(std::string &rq)
+void	Request::parseRequestMethodPathVers()
 {
-	//Primary Cut of the HttpRequest to get Request Type, Path, and Version.
+	//Primary Cut of the HttpRequest to get informations from Status-Line.
 	size_t	first_endl;
 	size_t	next_space;
 
-	next_space = rq.find_first_of(" ");
-	this->_requestMethod = rq.substr(0, next_space);
-	this->consumeRequest(rq, next_space);
-	next_space = rq.find_first_of(" ");
-	this->_askedPath = rq.substr(0, next_space);
-	this->consumeRequest(rq, next_space);
-	first_endl = rq.find_first_of(C_ENDL);
-	this->_requestVers = rq.substr(0, first_endl);
-	this->consumeRequest(rq, first_endl + (C_ENDL_SIZE - 1));
+	next_space = this->_temp.find_first_of(" ");
+	this->_requestMethod = this->_temp.substr(0, next_space);
+	this->consumeRequest(next_space);
+	next_space = this->_temp.find_first_of(" ");
+	this->_askedPath = this->_temp.substr(0, next_space);
+	this->consumeRequest(next_space);
+	first_endl = this->_temp.find_first_of(C_ENDL);
+	this->_requestVers = this->_temp.substr(0, first_endl);
+	this->consumeRequest(first_endl + (C_ENDL_SIZE - 1));
 }
 
-void	Request::parseVars(std::string &rq)
+void	Request::parseVars()
 {
 	int	process;
 	size_t	first_endl;
@@ -106,24 +106,38 @@ void	Request::parseVars(std::string &rq)
 	std::string tmpVar;
 	std::string tmpVal;
 
-	process = 1;
+	if (this->_temp.find_first_of(":") < this->_temp.find_first_of(C_ENDL) && this->_temp.find_first_of(C_ENDL) != std::string::npos)
+		process = 1;
+	else
+		process = 0;
 	while (process)
 	{
-		next_doubledot = rq.find_first_of(":");
-		tmpVar = rq.substr(0, next_doubledot);
-		consumeRequest(rq, next_doubledot + 1);
-		first_endl = rq.find_first_of(C_ENDL);
-		tmpVal = rq.substr(0, first_endl);
-		consumeRequest(rq, first_endl + (C_ENDL_SIZE - 1));
+		next_doubledot = this->_temp.find_first_of(":");
+		tmpVar = this->_temp.substr(0, next_doubledot);
+		std::cout << "tmpVar = [" << tmpVar << "]" << std::endl;
+		consumeRequest(next_doubledot + 1);
+		first_endl = this->_temp.find_first_of(C_ENDL);
+		tmpVal = this->_temp.substr(0, first_endl);
+		consumeRequest(first_endl + (C_ENDL_SIZE - 1));
 		this->_varList.insert(std::pair<std::string, std::string>(tmpVar, tmpVal));
-		if (!rq.compare(C_ENDL))
+		if (!this->_temp.find_first_of(C_ENDL))
 			process = 0;
 	}
 }
 
-void	Request::consumeRequest(std::string &rq, const size_t& idx)
+void	Request::consumeRequest(const size_t& idx)
 {
-	rq = rq.substr(idx + 1, rq.length() - idx);
+	if (this->_temp.compare("") != 0)
+		this->_temp = this->_temp.substr(idx + 1, this->_temp.length() - idx);
+}
+
+const int	Request::countInRequest(const std::string &str)
+{
+	int	i;
+	size_t	last;
+
+	for (i = 0, last = 0; (last = this->_temp.find(str, last + (last ? str.length() : 0))) != std::string::npos; ++i);
+	return i;
 }
 
 void	Request::dumpMPVandVars()
