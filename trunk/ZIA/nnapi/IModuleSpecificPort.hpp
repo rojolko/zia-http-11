@@ -16,6 +16,7 @@ namespace				zia
 	class				IModuleSpecificPort
 	{
 		public:
+			virtual							~IModuleSpecificPort() {}
 			/**
 			*  Defini les ports specifiques.
 			*  @param Reference vers la liste a remplir.

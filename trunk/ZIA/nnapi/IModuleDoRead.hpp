@@ -14,6 +14,7 @@ namespace				zia
 	class				IModuleDoRead
 	{
 		public:
+			virtual							~IModuleDoRead() {}
 			/**
 			*  Methode appelee pour lire sur le socket client
 			*  @param informations du client

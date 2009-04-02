@@ -14,6 +14,7 @@ namespace				zia
 	class				IModuleOnSend
 	{
 		public:
+			virtual							~IModuleOnSend() {}
 			/**
 			*  Methode appelee pour traiter le flux avant envoie
 			*  @param la reponse
