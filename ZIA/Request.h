@@ -31,7 +31,7 @@ class Request
 {
 	SOCKET				_sock;
 	int					_retVal;
-	std::ostringstream	_bufStream;
+	std::string			_request;
 	std::string			_temp;
 
 	std::string			_requestMethod;
@@ -53,12 +53,12 @@ public:
 	Request(SOCKET sock);
 	~Request(void);
 
-	CL_STAT			processRequest();
-	std::string		getRequest();
-	int				getRetVal();
+	CL_STAT				processRequest();
+	std::string			getRequest();
+	int					getRetVal();
 
-	void			parseRequest();
-	void			dumpMPVandVars();
+	void				parseRequest();
+	void				dumpMPVandVars();
 	const std::string	&getVers();
 	const std::string	&getMethod();
 	const std::string	&getPath();

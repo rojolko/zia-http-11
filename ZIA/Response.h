@@ -9,7 +9,7 @@ class Response
 {
 private:
 	bool				_bufReady;
-	std::ostringstream	_bufStream;
+	std::string			_response;
 public:
 	Response(void);
 	~Response(void);
