@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZIA", "ZIA\ZIA.vcproj", "{20971B89-F13C-402A-9CBD-0DEE24E9283D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zia Modules", "Zia Modules", "{729EC21A-FB09-4E24-B908-17C41F28D677}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zia_html", "zia_module\zia_html\zia_html.vcproj", "{7F9E2F7E-D104-4D62-9A67-917463E55191}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,8 +17,15 @@ Global
 		{20971B89-F13C-402A-9CBD-0DEE24E9283D}.Debug|Win32.Build.0 = Debug|Win32
 		{20971B89-F13C-402A-9CBD-0DEE24E9283D}.Release|Win32.ActiveCfg = Release|Win32
 		{20971B89-F13C-402A-9CBD-0DEE24E9283D}.Release|Win32.Build.0 = Release|Win32
+		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Debug|Win32.Build.0 = Debug|Win32
+		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Release|Win32.ActiveCfg = Release|Win32
+		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F9E2F7E-D104-4D62-9A67-917463E55191} = {729EC21A-FB09-4E24-B908-17C41F28D677}
 	EndGlobalSection
 EndGlobal

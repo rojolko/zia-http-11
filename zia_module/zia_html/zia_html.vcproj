@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="ZIA"
-	ProjectGUID="{20971B89-F13C-402A-9CBD-0DEE24E9283D}"
-	RootNamespace="ZIA"
+	Name="zia_html"
+	ProjectGUID="{7F9E2F7E-D104-4D62-9A67-917463E55191}"
+	RootNamespace="zia_html"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(ProjectDir)\nnapi"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\ZIA\nnapi&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ZIA_HTML_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,11 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(TargetDir)"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -94,7 +92,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -117,7 +115,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ZIA_HTML_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -137,7 +135,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -174,39 +172,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Client.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ConnectionManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Request.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Response.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Thread.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Timer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\utilisationthread.cpp"
+				RelativePath=".\zia_html.cpp"
 				>
 			</File>
 		</Filter>
@@ -216,109 +182,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\always.h"
+				RelativePath=".\zia_html.hpp"
 				>
 			</File>
-			<File
-				RelativePath=".\cl_stat_enum.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Client.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ConnectionManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DynamicObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\globals.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Request.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Response.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Thread.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Timer.h"
-				>
-			</File>
-			<Filter
-				Name="NNApi"
-				>
-				<File
-					RelativePath=".\nnapi\IModule.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleClient.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleConfig.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleDoClose.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleDoExec.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleDoRead.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleDoSend.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleOnAccept.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleOnClose.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleOnRead.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleOnSend.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleRequest.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleResponse.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleSpecificExtension.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\nnapi\IModuleSpecificPort.hpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -326,14 +192,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\Makefile"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

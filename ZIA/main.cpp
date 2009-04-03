@@ -1,11 +1,21 @@
 #include "ConnectionManager.h"
 #include <iostream>
-
-void	ThreadExample();
+#include <Windows.h>
+#include "IModule.hpp"
+#include "DynamicObject.h"
 
 int	main(int ac, char *av[])
 {
 	ConnectionManager	*cm;
+	DynamicObject		dObj;
+	zia::IModule		*test;
+
+	test = dObj.getInstanceFromModule(TEXT("zia_html.dll"));
+	if (test)
+	{
+		std::cout << test->getName() << std::endl;
+		delete test;
+	}
 
 	std::cout << "ZIA server Startup..." << std::endl;
 	try
@@ -26,4 +36,3 @@ int	main(int ac, char *av[])
 		exit(-1);
 	}
 }
-
