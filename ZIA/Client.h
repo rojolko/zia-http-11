@@ -22,13 +22,14 @@
 #include <string>
 #include <iostream>
 
+#include "IModule.hpp"
 #include "Request.h"
 #include "Response.h"
 #include "cl_stat_enum.h"
 #include "Timer.h"
 //#define	CL_BUFF_SIZE	512
 
-class Client
+class Client : public zia::IModuleClient
 {
 private:
 	SOCKET		_sock;
@@ -45,6 +46,10 @@ private:
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client();
+
+	// IModuleClient
+	int		getSocket() const;
+	unsigned short	getPort() const;
 
 	void		process();
 	bool		needtoWrite();

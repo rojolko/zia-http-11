@@ -33,12 +33,11 @@ public:
 	short										getCode(void) const;
 	void										setMessage(const std::string&);
 	const std::string&							getMessage(void) const;
+	void										buildMessage(void);
 	void										setFilePath(const std::string&);
 	const std::string&							getFilePath(void) const;
 	void										isTmpFile(bool);
 	bool										isTmpFile(void) const;
-
-	std::string							getFullResponse(void);
 };
 
 #endif

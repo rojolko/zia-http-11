@@ -19,6 +19,18 @@ Client::~Client()
 	closesocket(this->_sock);
 }
 
+// IModuleClient
+
+int		Client::getSocket() const
+{
+	return (int)this->_sock;
+}
+
+unsigned short	Client::getPort() const
+{
+	return this->_clientSrcInfIn.sin_port;
+}
+
 const char	*Client::getIp()
 {
 	return (inet_ntoa((in_addr)this->_clientSrcInfIn.sin_addr));
@@ -90,16 +102,11 @@ void	Client::process()
 
 		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
 
+		this->_response->buildMessage();
+		
+		// a remplacer !
 		this->_response->isTmpFile(true);
-/*
-		this->_response->bufAdd("HTTP/1.1 200 OK\r\n");
-		this->_response->bufAdd("Content-Length: 74\r\n");
-		this->_response->bufAdd("Connection: close\r\n");
-		this->_response->bufAdd("Content-Type: text/html; charset=utf-8\r\n");
-		this->_response->bufAdd("\r\n");
-		this->_response->bufAdd("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
-		this->_response->setBufReady(true);
-*/
+
 		///////////////////////   /!\  TEST  END  /!\    ////////////////////////
 
 
@@ -109,7 +116,9 @@ void	Client::process()
 	else if (this->_status == RESPONSE)
 	{
 		//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
-		/*std::cout << "Send return = [" << */send(this->_sock, this->_response->getFullResponse().c_str(), this->_response->getFullResponse().size(), 0)/* << "]" << std::endl*/;
+		/*std::cout << "Send return = [" << */
+		send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0)
+		/* << "]" << std::endl*/;
 
 		this->delRequest();
 		this->delResponse();
