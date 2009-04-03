@@ -92,29 +92,31 @@ bool	Response::isTmpFile(void) const
 }
 
 
-std::string	Response::getFullResponse(void)
-{
-	std::string	fullResponse;
+// own
 
+void	Response::buildMessage(void)
+{
 	// status-line
-	fullResponse = this->getVersion();
-	fullResponse += " ";
-	fullResponse += "200";
-	fullResponse += "\r\n";
+	this->_message += this->getVersion();
+	this->_message += " ";
+	//this->_message += this->getCode();
+	// a remplacer 
+	this->_message += "200";
+	this->_message += "\r\n";
 
 	// general-header | response-header | entity-header
 	for (this->_headersIt = this->_headers.begin(); this->_headersIt != this->_headers.end(); ++this->_headersIt)
 	{
-		fullResponse += this->_headersIt->first;
-		fullResponse += ": ";
-		fullResponse += this->_headersIt->second;
-		fullResponse += "\r\n";
+		this->_message += this->_headersIt->first;
+		this->_message += ": ";
+		this->_message += this->_headersIt->second;
+		this->_message += "\r\n";
 	}
+
 	// CRLF
-	fullResponse += "\r\n";
+	this->_message += "\r\n";
 
 	// message-body
-	fullResponse += this->getContent();
-
-	return fullResponse;
+	if (!this->getContent().empty())
+		this->_message += this->getContent();
 }
