@@ -190,6 +190,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ModuleInfo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ModuleManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Request.cpp"
 				>
 			</File>
@@ -236,7 +244,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GetAs.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\globals.h"
+				>
+			</File>
+			<File
+				RelativePath=".\mod_type_def.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ModuleInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ModuleManager.h"
 				>
 			</File>
 			<File

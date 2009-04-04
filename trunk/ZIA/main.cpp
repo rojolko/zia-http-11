@@ -3,19 +3,21 @@
 #include <Windows.h>
 #include "IModule.hpp"
 #include "DynamicObject.h"
+#include "ModuleManager.h"
 
 int	main(int ac, char *av[])
 {
 	ConnectionManager	*cm;
-	DynamicObject		dObj;
+	ModuleManager		*mm;
 	zia::IModule		*test;
 
-	test = dObj.getInstanceFromModule(TEXT("zia_html.dll"));
-	if (test)
-	{
-		std::cout << test->getName() << std::endl;
-		delete test;
-	}
+	mm = new ModuleManager();
+
+	mm->LoadModule(TEXT("zia_html.dll"));
+//	mm->LoadModule(TEXT("mod_test1.dll"));
+//	mm->LoadModule(TEXT("mod_bf.dll"));
+
+	mm->dumpLoadedModule();
 
 	std::cout << "ZIA server Startup..." << std::endl;
 	try
