@@ -10,7 +10,8 @@ int	main(int ac, char *av[])
 	ConnectionManager	*cm;
 	ModuleManager		*mm;
 	zia::IModule		*test;
-
+	Config				cfg;
+	cfg.setInfo("Super", "RienDuTout");
 	mm = ModuleManager::getInstance();
 
 	mm->LoadModule(TEXT("zia_html.dll"));
@@ -22,7 +23,7 @@ int	main(int ac, char *av[])
 	std::cout << "ZIA server Startup..." << std::endl;
 	try
 	{
-		cm = new ConnectionManager(8080);
+		cm = new ConnectionManager(8080, cfg);
 		//ThreadExample();
 		while (1)
 		{

@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Config.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ConnectionManager.cpp"
 				>
 			</File>
@@ -214,6 +218,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Tools.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\utilisationthread.cpp"
 				>
 			</File>
@@ -233,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\Client.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Config.h"
 				>
 			</File>
 			<File
@@ -277,6 +289,10 @@
 			</File>
 			<File
 				RelativePath=".\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Tools.h"
 				>
 			</File>
 			<Filter

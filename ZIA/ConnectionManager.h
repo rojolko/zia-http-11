@@ -27,6 +27,8 @@
 #include <iostream>
 
 #include "Client.h"
+#include "Config.h"
+#include "Tools.h"
 
 class ConnectionManager
 {
@@ -43,6 +45,8 @@ private:
 	std::map<SOCKET, Client*>			_clientList;
 	std::map<SOCKET, Client*>::iterator	_clientIt;
 
+	Config						_cfgMgr;
+
 	void		cmInitWSA();
 	void		cmSetSocket();
 	void		cmBind(const int port);
@@ -52,7 +56,7 @@ private:
 	void		dumpClientsData();
 
 public:
-	ConnectionManager(const int port);
+	ConnectionManager(const int port, const Config &cfg);
 	~ConnectionManager(void);
 
 	void		fillFdSet();
