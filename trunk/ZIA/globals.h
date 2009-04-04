@@ -3,7 +3,7 @@
 
 typedef struct			s_statcde
 {
-	const unsigned int	cde;
+	const short	cde;
 	const char			*str;
 }						t_statcde;
 

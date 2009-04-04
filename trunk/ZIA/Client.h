@@ -43,6 +43,12 @@ private:
 	int*		_readQueue;
 	int*		_writeQueue;
 	//	char			_readBuff[CL_BUFF_SIZE];
+	void		_doOnAccept();
+	void		_doRead();
+	void		_doOnRead();
+	void		_doExec();
+	void		_doOnSend();
+	void		_doSend();
 public:
 	Client(SOCKET, sockaddr, SOCKADDR_IN);
 	~Client();
