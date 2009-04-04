@@ -14,6 +14,8 @@ class ModuleManager
 private:
 	static	ModuleManager*							_singleton;
 
+	DynamicObject*									_loader;
+
 	std::map<zia::IModule*, ModuleInfo*>			_moduleList;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	_it;
 
