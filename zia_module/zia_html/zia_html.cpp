@@ -18,6 +18,10 @@ namespace zia
 	bool			HtmlModule::OnLoad(IModuleConfig *conf)
 	{
 		this->_conf = conf;
+		std::string	www;
+		conf->getInfo("www-dir", www);
+
+		std::cout << "Load Success : " << www << std::endl;
 		return true;
 	}
 
@@ -43,6 +47,11 @@ namespace zia
 	bool	HtmlModule::onAccept(IModuleClient &cl)
 	{
 		std::cout << "Module zia_html : onAccept client sock #" << cl.getSocket() << " port : " << cl.getPort() << std::endl;
+		return true;
+	}
+	bool	HtmlModule::doExec(IModuleRequest &request, IModuleClient &client, IModuleResponse &response)
+	{
+
 		return true;
 	}
 }

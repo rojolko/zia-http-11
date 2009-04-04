@@ -11,12 +11,16 @@ int	main(int ac, char *av[])
 	ModuleManager		*mm;
 	zia::IModule		*test;
 	Config				cfg;
-	cfg.setInfo("Super", "RienDuTout");
+
+	cfg.setInfo("www-dir", "./");
+	cfg.setInfo("tmp-dir", "./");
+	cfg.setInfo("homepage", "index.bf");
+
 	mm = ModuleManager::getInstance();
 
-	mm->LoadModule(TEXT("zia_html.dll"));
-//	mm->LoadModule(TEXT("mod_test1.dll"));
-//	mm->LoadModule(TEXT("mod_bf.dll"));
+//	mm->LoadModule(TEXT("zia_html.dll"), cfg);
+//	mm->LoadModule(TEXT("mod_test1.dll"), cfg);
+//	mm->LoadModule(TEXT("mod_bf.dll"), cfg);
 
 	mm->dumpLoadedModule();
 

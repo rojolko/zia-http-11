@@ -3,11 +3,14 @@
 
 #include <list>
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <Windows.h>
 
 #include "IModule.hpp"
 #include "ModuleInfo.h"
 #include "DynamicObject.h"
+#include "Config.h"
 
 class ModuleManager
 {
@@ -25,7 +28,7 @@ public:
 	static ModuleManager*							getInstance();
 	static void										killInstance();
 
-	void											LoadModule(LPCTSTR);
+	void											LoadModule(LPCTSTR, Config&);
 
 	std::map<zia::IModule*, ModuleInfo*>			getModuleList(void);
 

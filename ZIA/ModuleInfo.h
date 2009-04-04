@@ -4,9 +4,13 @@
 #include <iostream>
 #include <string>
 
+#include <TCHAR.H>
+
 #include "IModule.hpp"
 #include "mod_type_def.h"
 #include "getAs.hpp"
+
+typedef std::basic_string<TCHAR> tstring;
 
 class			ModuleInfo
 {

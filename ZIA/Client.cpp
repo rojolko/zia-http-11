@@ -99,7 +99,11 @@ void	Client::process()
 	if (this->_status == FETCH)
 		this->_doRead();
 	else if (this->_status == PROCESS)
+	{
+		this->_doOnRead();
 		this->_doExec();
+		this->_doOnSend();
+	}
 	else if (this->_status == RESPONSE)
 		this->_doSend();
 }
@@ -124,31 +128,45 @@ void		Client::_doRead()
 
 void		Client::_doOnRead()
 {
-
+	std::cout << "do On Read !!!!" << std::endl;
+	this->_request->parseRequest();
 }
 
 void		Client::_doExec()
 {
-	//Build the response for the client (Review, We could need another state like "Respond")
-	this->_request->parseRequest();
-	//<IModuleOnRead>
-
-	///////////////////////   /!\  TEST  START  /!\    ////////////////////////
+	bool		mod_do_exec = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 
 	this->allocResponse();
-	//Create Status Line -> Method SP Request-URI SP HTTP-Version CRLF
 
-	this->_response->setVersion("HTTP/1.1");
-	this->_response->setCode(200);
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(DO_EXEC))
+		{
+			getAs<zia::IModuleDoExec>(i->first)->doExec(*this->_request, *this, *this->_response);
+			mod_do_exec = true;
+		}
 
-	this->_response->setHeader("Content-Length", "74");
-	//this->_response->setHeader("Connection", "close");
-	this->_response->setHeader("Content-Type", "text/html; charset=utf-8");
+	if (!mod_do_exec)
+	{
+		//Build the response for the client (Review, We could need another state like "Respond")
+		
+		//<IModuleOnRead>
 
-	this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+		///////////////////////   /!\  TEST  START  /!\    ////////////////////////
 
-	this->_response->buildMessage();
+		//Create Status Line -> Method SP Request-URI SP HTTP-Version CRLF
 
+		this->_response->setVersion("HTTP/1.1");
+		this->_response->setCode(200);
+
+		this->_response->setHeader("Content-Length", "74");
+		//this->_response->setHeader("Connection", "close");
+		this->_response->setHeader("Content-Type", "text/html; charset=utf-8");
+
+		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+
+		this->_response->buildMessage();
+	}
 	// a remplacer !
 	/*/!\*/		this->_response->isTmpFile(true); /*/!\*/
 
