@@ -34,11 +34,12 @@ void	ModuleManager::killInstance()
 
 void	ModuleManager::LoadModule(LPCTSTR modulePath)
 {
-	DynamicObject	loader;
 	zia::IModule*	tmp;
 	ModuleInfo*		mi;
+	
+	this->_loader = new DynamicObject();
 
-	tmp = loader.getInstanceFromModule(modulePath);
+	tmp = this->_loader->getInstanceFromModule(modulePath);
 	if (tmp)
 		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp)));
 }

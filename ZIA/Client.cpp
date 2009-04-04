@@ -6,13 +6,13 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 	_mm = ModuleManager::getInstance();
 	_mm->dumpLoadedModule();
 	_moduleList = _mm->getModuleList();
-	_doOnAccept();
 	_status = CONNECT;
 	_sock = sock;
 	_clientSrcInf = srcInf;
 	_clientSrcInfIn = srcInfIn;
 	_request = NULL;
 	_response = NULL;
+	_doOnAccept();
 	_timer.start();
 }
 
@@ -107,19 +107,10 @@ void	Client::process()
 void		Client::_doOnAccept()
 {
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
-	zia::IModuleOnAccept*	tmp;
-
-	std::cout << "DO ON ACCEPT START ----" << std::endl;
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
-	{
 		if (i->second->isModule(ON_ACCEPT))
-		{
-			tmp = getAs<zia::IModuleOnAccept>(i->first);
-			tmp->onAccept(*this);
-		}
-	}
-	std::cout << "DO ON ACCEPT END ----" << std::endl;
+			getAs<zia::IModuleOnAccept>(i->first)->onAccept(*this);
 }
 
 void		Client::_doRead()
