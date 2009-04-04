@@ -93,4 +93,11 @@ const char *t_HeaderFields[]=
 	NULL
 };
 
+const char	*t_Protocols[]=
+{
+	"HTTP/1.1",
+	"HTTP/1.0",
+	NULL,
+};
+
 #endif
