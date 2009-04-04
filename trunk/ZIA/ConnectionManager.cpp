@@ -1,16 +1,20 @@
 #include "ConnectionManager.h"
 
-ConnectionManager::ConnectionManager(const int port)
+ConnectionManager::ConnectionManager(const int port, const Config &cfg)
 {
+	this->_cfgMgr = cfg;
 #if defined(WIN32) || defined(WIN64)
 	this->cmInitWSA();
 #endif
 	this->cmSetSocket();
 	this->cmBind(port);
+	this->_cfgMgr.setPort(Tools::intToString(port));
+	this->_cfgMgr.setIp(std::string(inet_ntoa(this->_src_inf.sin_addr)));
 	this->cmListen();
 	this->_selectTime.tv_sec = 0;
 	this->_selectTime.tv_usec = 100;
 	std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
+	this->_cfgMgr.dump();
 }
 
 ConnectionManager::~ConnectionManager(void)
