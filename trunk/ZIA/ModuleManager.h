@@ -25,7 +25,7 @@ public:
 
 	void											LoadModule(LPCTSTR);
 
-	const std::map<zia::IModule*, ModuleInfo*>		getModuleList(void) const;
+	std::map<zia::IModule*, ModuleInfo*>			getModuleList(void);
 
 	void											dumpLoadedModule(void);
 };

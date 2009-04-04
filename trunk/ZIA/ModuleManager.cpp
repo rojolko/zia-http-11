@@ -49,7 +49,7 @@ void	ModuleManager::dumpLoadedModule(void)
 		this->_it->second->dumpInfo();
 }
 
-const std::map<zia::IModule*, ModuleInfo*>	ModuleManager::getModuleList(void) const
+std::map<zia::IModule*, ModuleInfo*>	ModuleManager::getModuleList(void)
 {
 	return this->_moduleList;
 }

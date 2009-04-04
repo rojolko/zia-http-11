@@ -23,10 +23,15 @@
 #include <iostream>
 
 #include "IModule.hpp"
+#include "ModuleManager.h"
 #include "Request.h"
 #include "Response.h"
 #include "cl_stat_enum.h"
+#include "mod_type_def.h"
 #include "Timer.h"
+
+#include "getAs.hpp"
+
 //#define	CL_BUFF_SIZE	512
 
 class Client : public zia::IModuleClient
@@ -42,6 +47,8 @@ private:
 	Timer		_timer;
 	int*		_readQueue;
 	int*		_writeQueue;
+	ModuleManager*	_mm;
+	std::map<zia::IModule*, ModuleInfo*>	_moduleList;
 	//	char			_readBuff[CL_BUFF_SIZE];
 	void		_doOnAccept();
 	void		_doRead();
