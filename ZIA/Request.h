@@ -40,7 +40,7 @@ private:
 	std::string			_askedPath;
 	std::string			_requestVers;
 	std::string			_body;
-	unsigned int		_statusCode;
+	short				_statusCode;
 
 	std::map<std::string, std::string>				_varList;
 	std::map<std::string, std::string>::iterator	_varIt;
@@ -51,15 +51,16 @@ private:
 	void		consumeRequest(const size_t &);
 	const int	countInRequest(const std::string &);
 
-	bool		isValidRequest();
+	const bool		isValidRequest();
 public:
 	Request(void);
-	Request(SOCKET sock);
+	Request(const SOCKET sock);
 	~Request(void);
 
-	CL_STAT				processRequest();
-	std::string			getRequest();
-	int					getRetVal();
+	const CL_STAT				processRequest();
+	const std::string			getRequest() const;
+	const int			getRetVal() const;
+	const short			getStatusCode() const;
 
 	void				parseRequest();
 	void				dumpMPVandVars();

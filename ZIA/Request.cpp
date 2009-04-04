@@ -3,11 +3,13 @@
 
 Request::Request(void)
 {
+	_statusCode = 0;
 }
 
-Request::Request(SOCKET sock)
+Request::Request(const SOCKET sock)
 {
 	_sock = sock;
+	_statusCode = 0;
 }
 
 Request::~Request(void)
@@ -19,11 +21,13 @@ Request::~Request(void)
 	}
 }
 
-CL_STAT					Request::processRequest()
+const CL_STAT					Request::processRequest()
 {
 	char	readBuff[RQ_BUFF_SIZE];
 
 	this->_retVal = recv(this->_sock, readBuff, RQ_BUFF_SIZE - 1, 0);
+	//<IModuleDoRead>
+
 	// peut etre a modif ...
 	if (this->_retVal <= 0)
 		return (CLOSE);
@@ -34,14 +38,19 @@ CL_STAT					Request::processRequest()
 	return (PROCESS);
 }
 
-std::string			Request::getRequest()
+const std::string			Request::getRequest() const
 {
 	return (this->_request);
 }
 
-int							Request::getRetVal()
+const int	Request::getRetVal() const
 {
 	return this->_retVal;
+}
+
+const short	Request::getStatusCode() const
+{
+	return this->_statusCode;
 }
 
 void			Request::parseRequest()
@@ -59,14 +68,15 @@ void			Request::parseRequest()
 		std::cout << "Bad request" << std::endl;
 }
 
-bool	Request::isValidRequest()
+const bool	Request::isValidRequest()
 {
-	int	disc;
 	int	i;
 
-	for (disc = std::string::npos, i = 0; t_Methods[i] != NULL; ++i)
-		if (this->_temp.find(t_Methods[i]) != disc)
+	for (i = 0; t_Methods[i] != NULL; ++i)
+		if (this->_temp.find(t_Methods[i]) == 0)
 			return true;
+	this->_statusCode = 501;
+	std::cout << "Bad Request - Method not found." << std::endl;
 	return false;
 }
 
@@ -89,18 +99,19 @@ void	Request::parseRequestMethodPathVers()
 
 void	Request::parseVars()
 {
-	int	process;
 	size_t	first_endl;
 	size_t	next_doubledot;
 	std::string tmpVar;
 	std::string tmpVal;
 
-	if (this->_temp.find_first_of(":") < this->_temp.find_first_of(C_ENDL) && this->_temp.find_first_of(C_ENDL) != std::string::npos)
-		process = 1;
-	else
-		process = 0;
-	while (process)
+	while (1)
 	{
+		if (!(this->_temp.find_first_of(":") < this->_temp.find_first_of(C_ENDL) && this->_temp.find_first_of(C_ENDL) != std::string::npos))
+		{
+			std::cout << "Bad Request Bad Syntax for headers-[" << this->_temp << "]" << std::endl;
+			this->_statusCode = 400;
+			break;
+		}
 		next_doubledot = this->_temp.find_first_of(":");
 		tmpVar = this->_temp.substr(0, next_doubledot);
 		std::cout << "tmpVar = [" << tmpVar << "]" << std::endl;
@@ -110,7 +121,7 @@ void	Request::parseVars()
 		consumeRequest(first_endl + (C_ENDL_SIZE - 1));
 		this->_varList.insert(std::pair<std::string, std::string>(tmpVar, tmpVal));
 		if (!this->_temp.find_first_of(C_ENDL))
-			process = 0;
+			break;
 	}
 }
 
