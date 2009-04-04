@@ -15,7 +15,8 @@ namespace zia
 	class							HtmlModule :	public IModule,
 													public IModuleDoRead,
 													public IModuleSpecificExtension,
-													public IModuleOnAccept
+													public IModuleOnAccept,
+													public IModuleDoExec
 	{
 		public:
 			HtmlModule(void);
@@ -26,6 +27,7 @@ namespace zia
 			virtual int						doRead(IModuleClient &, void *, unsigned int);
 			virtual void					getExtensions(std::list<std::string> &);
 			virtual bool					onAccept(IModuleClient &);
+			virtual bool					doExec(IModuleRequest &, IModuleClient &, IModuleResponse &);
 		private:
 			IModuleConfig					*_conf;
 	};

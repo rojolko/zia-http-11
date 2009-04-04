@@ -4,7 +4,7 @@ ModuleManager *ModuleManager::_singleton = NULL;
 
 ModuleManager::ModuleManager()
 {
-
+	_loader = new DynamicObject();
 }
 
 ModuleManager::~ModuleManager()
@@ -32,14 +32,25 @@ void	ModuleManager::killInstance()
 	}
 }
 
-void	ModuleManager::LoadModule(LPCTSTR modulePath)
+void	ModuleManager::LoadModule(LPCTSTR modulePath, Config &cfg)
 {
 	zia::IModule*	tmp;
 	ModuleInfo*		mi;
-	
-	this->_loader = new DynamicObject();
+
+	tstring	ts(modulePath);
+
+/*	std::wostringstream	wos;
+	std::wstring			ws;
+
+	wos << modulePath;
+	ws = wos.str();
+*/	
+//	this->_loader = new DynamicObject();
+
+	std::cout << " MODULE PATH :: " << ts.c_str() << std::endl;
 
 	tmp = this->_loader->getInstanceFromModule(modulePath);
+	tmp->OnLoad(&cfg);
 	if (tmp)
 		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp)));
 }
