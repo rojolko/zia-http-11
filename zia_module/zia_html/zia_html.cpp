@@ -40,6 +40,11 @@ namespace zia
 		ext = "php";
 		extList.push_back(ext);
 	}
+	bool	HtmlModule::onAccept(IModuleClient &cl)
+	{
+		std::cout << "Module zia_html : onAccept client sock #" << cl.getSocket() << " port : " << cl.getPort() << std::endl;
+		return true;
+	}
 }
 
 

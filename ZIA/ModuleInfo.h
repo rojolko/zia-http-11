@@ -6,7 +6,7 @@
 
 #include "IModule.hpp"
 #include "mod_type_def.h"
-#include "GetAs.hpp"
+#include "getAs.hpp"
 
 class			ModuleInfo
 {
