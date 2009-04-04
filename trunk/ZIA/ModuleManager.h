@@ -18,6 +18,8 @@ private:
 	std::map<zia::IModule*, ModuleInfo*>::iterator	_it;
 
 public:
+	ModuleManager();
+	~ModuleManager();
 	static ModuleManager*							getInstance();
 	static void										killInstance();
 
