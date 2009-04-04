@@ -1,10 +1,6 @@
 //
 // INCLUDES
 //
-#include <Windows.h>
-#include <iostream>
-
-#include "IModule.hpp"
 #include "zia_html.hpp"
 
 namespace zia
@@ -33,8 +29,19 @@ namespace zia
 	{
 		return ("mod_html");
 	}
+	int		HtmlModule::doRead(zia::IModuleClient &cl, void *buf, unsigned int size)
+	{
+		return 1;
+	}
+	void	HtmlModule::getExtensions(std::list<std::string> &extList)
+	{
+		std::string	ext;
 
+		ext = "php";
+		extList.push_back(ext);
+	}
 }
+
 
 zia::IModule		*createInstance(void)
 {
