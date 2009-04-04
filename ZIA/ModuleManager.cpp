@@ -2,6 +2,16 @@
 
 ModuleManager *ModuleManager::_singleton = NULL;
 
+ModuleManager::ModuleManager()
+{
+
+}
+
+ModuleManager::~ModuleManager()
+{
+
+}
+
 ModuleManager *ModuleManager::getInstance()
 {
 	if (ModuleManager::_singleton == NULL)

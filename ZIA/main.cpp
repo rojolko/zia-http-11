@@ -11,7 +11,7 @@ int	main(int ac, char *av[])
 	ModuleManager		*mm;
 	zia::IModule		*test;
 
-	mm = new ModuleManager();
+	mm = ModuleManager::getInstance();
 
 	mm->LoadModule(TEXT("zia_html.dll"));
 //	mm->LoadModule(TEXT("mod_test1.dll"));
