@@ -21,7 +21,7 @@ Request::~Request(void)
 	}
 }
 
-const CL_STAT					Request::processRequest()
+CL_STAT					Request::processRequest()
 {
 	char	readBuff[RQ_BUFF_SIZE];
 
@@ -58,26 +58,44 @@ void			Request::parseRequest()
 	//std::cout << "Flux Entrant: {" << this->_request << "}" << std::endl;
 	std::cout << "Size Request = " << this->_request.length() << std::endl;
 	this->_temp = this->_request;
-	if (this->isValidRequest())
-	{
-		this->parseRequestMethodPathVers();
+	this->parseRequestMethodPathVers();
+	if (!this->_statusCode && this->_temp.length())
 		this->parseVars();
-		this->dumpMPVandVars();
-	}
-	else
-		std::cout << "Bad request" << std::endl;
+	if (!this->_statusCode)
+		if (this->isValidMethod())
+			if (this->isValidProtocolVersion())
+				if (this->isValidHeader())
+					this->parseBody();
+	this->dumpMPVandVars();
 }
 
-const bool	Request::isValidRequest()
+bool	Request::isValidMethod()
 {
 	int	i;
 
 	for (i = 0; t_Methods[i] != NULL; ++i)
-		if (this->_temp.find(t_Methods[i]) == 0)
+		if (this->_requestMethod.compare(t_Methods[i]) == 0)
 			return true;
+	std::cout << "Bad Request - Unsupported method." << std::endl;
 	this->_statusCode = 501;
-	std::cout << "Bad Request - Method not found." << std::endl;
 	return false;
+}
+
+bool	Request::isValidProtocolVersion()
+{
+	int	i;
+
+	for (i = 0; t_Protocols[i] != NULL; ++i)
+		if (this->_requestVers.compare(t_Protocols[i]) == 0)
+			return true;
+	std::cout << "Bad Request - Unsupported protocol." << std::endl;
+	this->_statusCode = 505;
+	return false;
+}
+
+bool	Request::isValidHeader()
+{
+	return true;
 }
 
 void	Request::parseRequestMethodPathVers()
@@ -85,16 +103,46 @@ void	Request::parseRequestMethodPathVers()
 	//Primary Cut of the HttpRequest to get informations from Status-Line.
 	size_t	first_endl;
 	size_t	next_space;
-
-	next_space = this->_temp.find_first_of(" ");
-	this->_requestMethod = this->_temp.substr(0, next_space);
-	this->consumeRequest(next_space);
-	next_space = this->_temp.find_first_of(" ");
-	this->_askedPath = this->_temp.substr(0, next_space);
-	this->consumeRequest(next_space);
-	first_endl = this->_temp.find_first_of(C_ENDL);
-	this->_requestVers = this->_temp.substr(0, first_endl);
-	this->consumeRequest(first_endl + (C_ENDL_SIZE - 1));
+	size_t	to_use;
+	size_t	elem_size;
+	int		i;
+	for (i = 0, elem_size = 0; 1; ++i)
+	{
+		next_space = this->_temp.find_first_of(" ");
+		first_endl = this->_temp.find_first_of(C_ENDL);
+		if (elem_size == 1 || this->_temp.length() == 0)
+			break;
+		if (next_space > first_endl && first_endl != std::string::npos)
+		{
+			if (i < 2)
+			{
+				std::cout << "Bad Request - Wrong Satus-Line Synthax. Case 1 : Too few words." << std::endl;
+				std::cout << "	Request Content - [" << this->_temp << "]." << std::endl;
+				this->_statusCode = 400;
+				break;
+			}
+			elem_size = 1;
+			to_use = first_endl;
+		}
+		else
+		{
+			elem_size = 0;
+			to_use = next_space;
+		}
+		if (i == 0)
+			this->_requestMethod = this->_temp.substr(0, to_use);
+		else if (i == 1)
+			this->_askedPath = this->_temp.substr(0, to_use);
+		else if (i == 2)
+			this->_requestVers = this->_temp.substr(0, to_use);
+		else if (i == 3 && this->_temp.length())
+		{	
+			std::cout << "Bad Request - Wrong Status-Line Synthax. Case 2 : Too many words. ToParse[" << this->_temp << "]." << std::endl;
+			this->_statusCode = 400;
+			break;
+		}
+		this->consumeRequest(to_use + elem_size);
+	}
 }
 
 void	Request::parseVars()
@@ -114,7 +162,6 @@ void	Request::parseVars()
 		}
 		next_doubledot = this->_temp.find_first_of(":");
 		tmpVar = this->_temp.substr(0, next_doubledot);
-		std::cout << "tmpVar = [" << tmpVar << "]" << std::endl;
 		consumeRequest(next_doubledot + 1);
 		first_endl = this->_temp.find_first_of(C_ENDL);
 		tmpVal = this->_temp.substr(0, first_endl);
@@ -125,10 +172,23 @@ void	Request::parseVars()
 	}
 }
 
+void	Request::parseBody()
+{
+	if (this->_temp.length() > 0 && this->_temp.compare(C_ENDL))
+	{
+		if (this->_temp.find(C_ENDL) == 0)
+			this->_temp = this->_temp.substr(2, this->_temp.length() - 2);
+		this->setContent(this->_temp);
+	}
+	std::cout << "Content Set - Content Size = " << this->_body.length() << " bytes." << std::endl;
+}
+
 void	Request::consumeRequest(const size_t& idx)
 {
-	if (this->_temp.compare("") != 0)
+	if (this->_temp.length() > idx)
 		this->_temp = this->_temp.substr(idx + 1, this->_temp.length() - idx);
+	else
+		this->_temp = "";
 }
 
 const int	Request::countInRequest(const std::string &str)

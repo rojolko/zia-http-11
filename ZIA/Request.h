@@ -48,16 +48,19 @@ private:
 	void		parseRequestMethodPathVers();
 	void		parseVars();
 	void		parseBody();
+	void		parseContent();
 	void		consumeRequest(const size_t &);
 	const int	countInRequest(const std::string &);
 
-	const bool		isValidRequest();
+	bool		isValidMethod();
+	bool		isValidProtocolVersion();
+	bool		isValidHeader();
 public:
 	Request(void);
 	Request(const SOCKET sock);
 	~Request(void);
 
-	const CL_STAT				processRequest();
+	CL_STAT				processRequest();
 	const std::string			getRequest() const;
 	const int			getRetVal() const;
 	const short			getStatusCode() const;
