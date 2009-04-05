@@ -32,12 +32,11 @@ void	ModuleManager::killInstance()
 	}
 }
 
-void	ModuleManager::LoadModule(LPCTSTR modulePath, Config &cfg)
+void	ModuleManager::LoadModule(const char* modulePath, Config &cfg)
 {
 	zia::IModule*	tmp;
-	ModuleInfo*		mi;
-
-	tstring	ts(modulePath);
+	wchar_t			tmp_fname[256];
+	//tstring	ts(modulePath);
 
 /*	std::wostringstream	wos;
 	std::wstring			ws;
@@ -46,13 +45,15 @@ void	ModuleManager::LoadModule(LPCTSTR modulePath, Config &cfg)
 	ws = wos.str();
 */	
 //	this->_loader = new DynamicObject();
-
-	std::cout << " MODULE PATH :: " << ts.c_str() << std::endl;
-
-	tmp = this->_loader->getInstanceFromModule(modulePath);
-	tmp->OnLoad(&cfg);
+	mbstowcs(tmp_fname, modulePath, 256);
+	tmp = this->_loader->getInstanceFromModule((LPCTSTR)tmp_fname);
 	if (tmp)
-		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp)));
+	{
+		tmp->OnLoad(&cfg);
+		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp, modulePath)));
+	}
+	else
+		std::cout << "Module File could not be loaded :" << modulePath << std::endl;
 }
 
 void	ModuleManager::dumpLoadedModule(void)

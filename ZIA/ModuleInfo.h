@@ -19,7 +19,7 @@ private:
 	std::string			_name;
 	std::string			_path;
 public:
-	ModuleInfo(zia::IModule*);
+	ModuleInfo(zia::IModule*, const char*);
 	~ModuleInfo();
 
 	const bool			isModule(const short) const;

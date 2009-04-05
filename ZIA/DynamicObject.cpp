@@ -13,7 +13,7 @@ DynamicObject::~DynamicObject()
 
 zia::IModule*	DynamicObject::getInstanceFromModule(LPCTSTR dllName)
 {
-	this->_hinstLib = LoadLibrary(dllName);
+	this->_hinstLib = LoadLibraryEx(dllName, NULL, NULL);
 	if (this->_hinstLib != NULL)
 	{
 		this->_procAdd = (MYPROC) GetProcAddress(this->_hinstLib, DO_INSTANTIATOR);
