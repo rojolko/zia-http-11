@@ -32,7 +32,7 @@
 
 #include "getAs.hpp"
 
-//#define	CL_BUFF_SIZE	512
+#define WAIT_FOR_MORE	42
 
 class Client : public zia::IModuleClient
 {
@@ -49,7 +49,6 @@ private:
 	int*		_writeQueue;
 	ModuleManager*	_mm;
 	std::map<zia::IModule*, ModuleInfo*>	_moduleList;
-	//	char			_readBuff[CL_BUFF_SIZE];
 	void		_doOnAccept();
 	void		_doRead();
 	void		_doOnRead();

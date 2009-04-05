@@ -117,7 +117,7 @@ void	Request::parseRequestMethodPathVers()
 			if (i < 2)
 			{
 				std::cout << "Bad Request - Wrong Satus-Line Synthax. Case 1 : Too few words." << std::endl;
-				std::cout << "	Request Content - [" << this->_temp << "]." << std::endl;
+				//std::cout << "	Request Content - [" << this->_temp << "]." << std::endl;
 				this->_statusCode = 400;
 				break;
 			}
@@ -137,7 +137,8 @@ void	Request::parseRequestMethodPathVers()
 			this->_requestVers = this->_temp.substr(0, to_use);
 		else if (i == 3 && this->_temp.length())
 		{	
-			std::cout << "Bad Request - Wrong Status-Line Synthax. Case 2 : Too many words. ToParse[" << this->_temp << "]." << std::endl;
+			std::cout << "Bad Request - Wrong Status-Line Synthax. Case 2 : Too many words." << std::endl;
+			//std::cout << "	Request Content - [" << this->_temp << "]." << std::endl;
 			this->_statusCode = 400;
 			break;
 		}

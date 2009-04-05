@@ -23,7 +23,7 @@
 #include "IModule.hpp"
 #include "cl_stat_enum.h"
 
-#define RQ_BUFF_SIZE 1000000
+#define RQ_BUFF_SIZE 2048
 
 #define C_ENDL	"\r\n"
 #define C_ENDL_SIZE 2
