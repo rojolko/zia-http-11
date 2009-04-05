@@ -25,6 +25,8 @@ bool	Config::setInfo(const std::string &key, const std::string &value)
 {
 	if (key.compare("ip") && key.compare("port"))
 	{
+		if (this->_varList.find(key) != this->_varList.end())
+			this->_varList.erase(key);
 		this->_varList.insert(std::pair<std::string, std::string>(key, value));
 		return true;
 	}
@@ -40,10 +42,14 @@ void	Config::dump()
 
 void	Config::setIp(const std::string& ip)
 {
+	if (this->_varList.find("ip") != this->_varList.end())
+			this->_varList.erase("ip");
 	this->_varList.insert(std::pair<std::string, std::string>("ip", ip));
 }
 
 void	Config::setPort(const std::string& port)
 {
+	if (this->_varList.find("port") != this->_varList.end())
+			this->_varList.erase("port");
 	this->_varList.insert(std::pair<std::string, std::string>("port", port));
 }

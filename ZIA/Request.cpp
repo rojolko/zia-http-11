@@ -66,7 +66,7 @@ void			Request::parseRequest()
 			if (this->isValidProtocolVersion())
 				if (this->isValidHeader())
 					this->parseBody();
-	this->dumpMPVandVars();
+	//this->dumpMPVandVars();
 }
 
 bool	Request::isValidMethod()
@@ -249,6 +249,8 @@ void	Request::setContent(const std::string &str)
 
 void	Request::setHeader(const std::string& key, const std::string &value)
 {
+	if (this->_varList.find(key) != this->_varList.end())
+		this->_varList.erase(key);
 	this->_varList.insert(std::pair<std::string, std::string>(key, value));
 }
 
