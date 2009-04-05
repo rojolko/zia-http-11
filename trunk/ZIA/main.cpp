@@ -20,7 +20,8 @@ int	main(int ac, char *av[])
 	cfg.dump();
 	mm = ModuleManager::getInstance();
 
-//	mm->LoadModule(TEXT("zia_html.dll"), cfg);
+	mm->LoadModule(TEXT("zia_html.dll"), cfg);
+	mm->LoadModule(TEXT("zia_ban.dll"), cfg);
 //	mm->LoadModule(TEXT("mod_test1.dll"), cfg);
 //	mm->LoadModule(TEXT("mod_bf.dll"), cfg);
 
