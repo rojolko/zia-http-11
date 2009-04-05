@@ -18,13 +18,37 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 
 Client::~Client()
 {
-	std::cout << "Client with IP:" << this->getIp() << " closed connection after " << this->_timer.getTicks() << "ms on socket #" << this->_sock << std::endl;
+	bool		mod_on_close = false;
+	bool		mod_do_close = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
+
 	this->delRequest();
 	this->delResponse();
+
 	//<IModuleOnClose>
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(ON_CLOSE))
+		{
+			getAs<zia::IModuleOnClose>(i->first)->onClose(*this);
+			mod_on_close = true;
+		}
+	if (!mod_on_close)
+	{
+		;
+	}
 
 	//<IModuleDoClose>
-	closesocket(this->_sock);
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(DO_CLOSE))
+		{
+			getAs<zia::IModuleDoClose>(i->first)->doClose(*this);
+			mod_do_close = true;
+		}
+	if (!mod_do_close)
+	{
+		std::cout << "Client with IP:" << this->getIp() << " closed connection after " << this->_timer.getTicks() << "ms on socket #" << this->_sock << std::endl;
+		closesocket(this->_sock);
+	}
 }
 
 // IModuleClient
@@ -110,27 +134,69 @@ void	Client::process()
 
 void		Client::_doOnAccept()
 {
+	bool		mod_on_accept = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(ON_ACCEPT))
+		{
 			getAs<zia::IModuleOnAccept>(i->first)->onAccept(*this);
+			mod_on_accept = true;
+		}
+	if (!mod_on_accept)
+	{
+		;
+	}
 }
 
 void		Client::_doRead()
 {
 	this->allocRequest();
-	//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
-	// Launch Read on the client's socket
-	this->_status = this->_request->processRequest();
-	//std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
-	this->_timer.start();
+
+	bool		mod_do_read = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
+
+	void*		mod_void = 0;
+	int			mod_int = 0;
+
+	this->allocResponse();
+
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(DO_READ))
+		{
+			getAs<zia::IModuleDoRead>(i->first)->doRead(*this, mod_void, mod_int);
+			mod_do_read = true;
+		}
+
+	if (!mod_do_read)
+	{
+		//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
+		// Launch Read on the client's socket
+		this->_status = this->_request->processRequest();
+		//std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+		this->_timer.start();
+	}
 }
 
 void		Client::_doOnRead()
 {
+	bool		mod_on_read = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
+
+	this->allocResponse();
+
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(ON_READ))
+		{
+			getAs<zia::IModuleOnRead>(i->first)->onRead(*this->_request);
+			mod_on_read = true;
+		}
+
+	if (!mod_on_read)
+	{
+		this->_request->parseRequest();
+	}
 	std::cout << "do On Read !!!!" << std::endl;
-	this->_request->parseRequest();
 }
 
 void		Client::_doExec()
@@ -165,8 +231,6 @@ void		Client::_doExec()
 		this->_response->setHeader("Content-Type", "text/html; charset=utf-8");
 
 		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
-
-		this->_response->buildMessage();
 	}
 	// a remplacer !
 	/*/!\*/		this->_response->isTmpFile(true); /*/!\*/
@@ -178,16 +242,45 @@ void		Client::_doExec()
 
 void		Client::_doOnSend()
 {
+	bool		mod_on_send = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 
+	this->allocResponse();
+
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(ON_SEND))
+		{
+			getAs<zia::IModuleOnSend>(i->first)->onSend(*this->_response);
+			mod_on_send = true;
+		}
+
+	if (!mod_on_send)
+		;
+	this->_response->buildMessage();
 }
 
 void		Client::_doSend()
 {
-	//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
-	/*std::cout << "Send return = [" << */
-	send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0)
-		/* << "]" << std::endl*/;
+	bool		mod_do_send = false;
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
+	unsigned int	mod_int;
 
+	this->allocResponse();
+
+	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(DO_SEND))
+		{
+			getAs<zia::IModuleDoSend>(i->first)->doSend(*this, (void*)this->_response->getMessage().c_str(), mod_int);
+			mod_do_send = true;
+		}
+
+	if (!mod_do_send)
+	{
+		//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
+		/*std::cout << "Send return = [" << */
+		send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0)
+			/* << "]" << std::endl*/;
+	}
 	this->delRequest();
 	this->delResponse();
 	//Depend of Connection Header and server conf

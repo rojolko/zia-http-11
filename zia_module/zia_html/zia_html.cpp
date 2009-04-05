@@ -33,11 +33,11 @@ namespace zia
 	{
 		return ("mod_html");
 	}
-	int		HtmlModule::doRead(zia::IModuleClient &cl, void *buf, unsigned int size)
+/*	int		HtmlModule::doRead(IModuleClient &cl, void *buf, unsigned int size)
 	{
 		return 1;
 	}
-	void	HtmlModule::getExtensions(std::list<std::string> &extList)
+*/	void	HtmlModule::getExtensions(std::list<std::string> &extList)
 	{
 		std::string	ext;
 
@@ -51,7 +51,15 @@ namespace zia
 	}
 	bool	HtmlModule::doExec(IModuleRequest &request, IModuleClient &client, IModuleResponse &response)
 	{
+		response.setVersion("HTTP/1.1");
+		response.setCode(200);
 
+		response.setHeader("Content-Length", "74");
+		//response.setHeader("Connection", "close");
+		response.setHeader("Content-Type", "text/html; charset=utf-8");
+
+		response.setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+	
 		return true;
 	}
 }

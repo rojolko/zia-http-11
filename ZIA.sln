@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zia Modules", "Zia Modules"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zia_html", "zia_module\zia_html\zia_html.vcproj", "{7F9E2F7E-D104-4D62-9A67-917463E55191}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zia_ban", "zia_module\zia_ban\zia_ban.vcproj", "{68EA377B-615B-414F-ABA2-EF7F399700CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,11 +23,16 @@ Global
 		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Debug|Win32.Build.0 = Debug|Win32
 		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Release|Win32.ActiveCfg = Release|Win32
 		{7F9E2F7E-D104-4D62-9A67-917463E55191}.Release|Win32.Build.0 = Release|Win32
+		{68EA377B-615B-414F-ABA2-EF7F399700CD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{68EA377B-615B-414F-ABA2-EF7F399700CD}.Debug|Win32.Build.0 = Debug|Win32
+		{68EA377B-615B-414F-ABA2-EF7F399700CD}.Release|Win32.ActiveCfg = Release|Win32
+		{68EA377B-615B-414F-ABA2-EF7F399700CD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7F9E2F7E-D104-4D62-9A67-917463E55191} = {729EC21A-FB09-4E24-B908-17C41F28D677}
+		{68EA377B-615B-414F-ABA2-EF7F399700CD} = {729EC21A-FB09-4E24-B908-17C41F28D677}
 	EndGlobalSection
 EndGlobal
