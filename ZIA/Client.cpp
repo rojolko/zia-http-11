@@ -98,7 +98,7 @@ void	Client::process()
 {
 	if (this->_status == FETCH)
 		this->_doRead();
-	else if (this->_status == PROCESS)
+	else if (this->_status == PROCESS && this->_timer.getTicks() > WAIT_FOR_MORE)
 	{
 		this->_doOnRead();
 		this->_doExec();
@@ -123,7 +123,8 @@ void		Client::_doRead()
 	//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
 	// Launch Read on the client's socket
 	this->_status = this->_request->processRequest();
-	std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+	//std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+	this->_timer.start();
 }
 
 void		Client::_doOnRead()
