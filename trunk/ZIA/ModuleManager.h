@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <Windows.h>
+#include <cstdlib>
 
 #include "IModule.hpp"
 #include "ModuleInfo.h"
@@ -28,7 +29,7 @@ public:
 	static ModuleManager*							getInstance();
 	static void										killInstance();
 
-	void											LoadModule(LPCTSTR, Config&);
+	void											LoadModule(const char*, Config&);
 
 	std::map<zia::IModule*, ModuleInfo*>			getModuleList(void);
 

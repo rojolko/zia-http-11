@@ -1,10 +1,10 @@
 #include "ModuleInfo.h"
 
 
-ModuleInfo::ModuleInfo(zia::IModule* module)
+ModuleInfo::ModuleInfo(zia::IModule* module, const char *filePath)
 {
 	_name = module->getName();
-	_path = "";
+	_path = filePath;
 
 	_heritTable[SPECIFIC_PORT] = (getAs<zia::IModuleSpecificPort>(module));
 	_heritTable[SPECIFIC_EXTENSION] = (getAs<zia::IModuleSpecificExtension>(module));
@@ -43,7 +43,6 @@ void	ModuleInfo::dumpInfo(void)
 	std::cout << "ModuleInfo DUMP --- start" << std::endl;
 	std::cout << "Module name = " << this->getName() << std::endl;
 	std::cout << "Module path = " << this->getPath() << std::endl;
-
 	std::cout << "IModuleSpecificPort = " << this->isModule(SPECIFIC_PORT) << std::endl;
 	std::cout << "IModuleSpecificExtension = " << this->isModule(SPECIFIC_EXTENSION) << std::endl;
 	std::cout << "IModuleOnAccept = " << this->isModule(ON_ACCEPT) << std::endl;
@@ -54,6 +53,5 @@ void	ModuleInfo::dumpInfo(void)
 	std::cout << "IModuleDoSend = " << this->isModule(DO_SEND) << std::endl;
 	std::cout << "IModuleOnClose = " << this->isModule(ON_CLOSE) << std::endl;
 	std::cout << "IModuleDoClose = " << this->isModule(DO_CLOSE) << std::endl;
-	
 	std::cout << "ModuleInfo DUMP --- end" << std::endl;
 }
