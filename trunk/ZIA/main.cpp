@@ -12,10 +12,12 @@ int	main(int ac, char *av[])
 	zia::IModule		*test;
 	Config				cfg;
 
+	//std::cout.setstate(std::ios::failbit); /* Pour desactiver les sorties */
 	cfg.setInfo("www-dir", "./");
 	cfg.setInfo("tmp-dir", "./");
 	cfg.setInfo("homepage", "index.bf");
-
+	cfg.setInfo("homepage", "index.php");
+	cfg.dump();
 	mm = ModuleManager::getInstance();
 
 //	mm->LoadModule(TEXT("zia_html.dll"), cfg);

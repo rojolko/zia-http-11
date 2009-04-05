@@ -25,7 +25,6 @@ const std::string&	Response::getVersion(void) const
 	return this->_version;
 }
 
-
 void	Response::setHeaders(const std::map<std::string, std::string>& headers)
 {
 	this->_headers = headers;
@@ -33,6 +32,8 @@ void	Response::setHeaders(const std::map<std::string, std::string>& headers)
 
 void	Response::setHeader(const std::string &h1, const std::string &h2)
 {
+	if (this->_headers.find(h1) != this->_headers.end())
+			this->_headers.erase(h1);
 	this->_headers.insert(std::pair<std::string, std::string>(h1, h2));
 }
 
