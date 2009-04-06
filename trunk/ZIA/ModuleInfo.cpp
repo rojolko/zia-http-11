@@ -3,7 +3,7 @@
 
 ModuleInfo::ModuleInfo(zia::IModule* module, const char *filePath)
 {
-	_name = module->getName();
+	_name = "";//module->getName();
 	_path = filePath;
 
 	_heritTable[SPECIFIC_PORT] = (getAs<zia::IModuleSpecificPort>(module));

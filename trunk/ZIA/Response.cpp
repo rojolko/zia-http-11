@@ -3,6 +3,7 @@
 Response::Response(void)
 {
 	_isTmpFile = false;
+	_isReady = false;
 	_code = 0;
 	_content = "";
 	_version = "";
@@ -90,6 +91,16 @@ void	Response::isTmpFile(bool isTmpFile)
 bool	Response::isTmpFile(void) const
 {
 	return this->_isTmpFile;
+}
+
+void	Response::isReady(bool isReady)
+{
+	this->_isReady = isReady;
+}
+
+bool	Response::isReady(void) const
+{
+	return this->_isReady;
 }
 
 

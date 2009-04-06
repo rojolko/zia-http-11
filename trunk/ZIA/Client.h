@@ -21,6 +21,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 
 #include "IModule.hpp"
 #include "ModuleManager.h"
@@ -29,6 +30,7 @@
 #include "cl_stat_enum.h"
 #include "mod_type_def.h"
 #include "Timer.h"
+#include "Tools.h"
 
 #include "getAs.hpp"
 
@@ -47,6 +49,7 @@ private:
 	Timer		_timer;
 	int*		_readQueue;
 	int*		_writeQueue;
+	int			_sendRet;
 	ModuleManager*	_mm;
 	std::map<zia::IModule*, ModuleInfo*>	_moduleList;
 	void		_doOnAccept();

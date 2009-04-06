@@ -18,12 +18,13 @@ int	main(int ac, char *av[])
 	cfg.setInfo("homepage", "index.bf");
 	cfg.setInfo("homepage", "index.php");
 	cfg.dump();
+
 	mm = ModuleManager::getInstance();
 
-//	mm->LoadModule(TEXT("zia_html.dll"), cfg);
-//	mm->LoadModule(TEXT("zia_ban.dll"), cfg);
-//	mm->LoadModule(TEXT("mod_test1.dll"), cfg);
-//	mm->LoadModule(TEXT("mod_bf.dll"), cfg);
+//	mm->LoadModule("mod_bf.dll", cfg);
+//	mm->LoadModule("zia_html.dll", cfg);
+//	mm->LoadModule("zia_ban.dll", cfg);
+//	mm->LoadModule("mod_test1.dll", cfg);
 
 	mm->dumpLoadedModule();
 
@@ -31,6 +32,7 @@ int	main(int ac, char *av[])
 	try
 	{
 		cm = new ConnectionManager(8080, cfg);
+
 		//ThreadExample();
 		while (1)
 		{

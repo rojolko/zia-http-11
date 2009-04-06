@@ -15,6 +15,16 @@ ConnectionManager::ConnectionManager(const int port, const Config &cfg)
 	this->_selectTime.tv_usec = 100;
 	std::cout << "Socket #" << this->_sock << " OK ! Listening on port " << port << "." << std::endl;
 	this->_cfgMgr.dump();
+
+	ModuleManager		*mm;
+
+	mm = ModuleManager::getInstance();
+
+//	mm->LoadModule("mod_bf.dll", this->_cfgMgr);
+	mm->LoadModule("zia_html.dll", this->_cfgMgr);
+//	mm->LoadModule("zia_ban.dll", this->_cfgMgr);
+//	mm->LoadModule("mod_test1.dll", this->_cfgMgr);
+
 }
 
 ConnectionManager::~ConnectionManager(void)
