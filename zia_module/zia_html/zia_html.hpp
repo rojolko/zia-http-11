@@ -21,6 +21,8 @@ namespace zia
 		public:
 			HtmlModule(void);
 			virtual ~HtmlModule(void);
+			static HtmlModule*				getInstance();
+
 			virtual std::string				getName(void) const;
 			virtual bool					OnLoad(IModuleConfig *conf);
 			virtual void					OnUnload(void);
@@ -30,6 +32,7 @@ namespace zia
 			virtual bool					doExec(IModuleRequest &, IModuleClient &, IModuleResponse &);
 		private:
 			IModuleConfig					*_conf;
+			static	HtmlModule*				_singleton;
 	};
 }
 

@@ -5,9 +5,20 @@
 
 namespace zia
 {
+	HtmlModule *HtmlModule::_singleton = NULL;
+	HtmlModule*		HtmlModule::getInstance()
+	{
+		if (HtmlModule::_singleton == NULL)
+		{
+			HtmlModule::_singleton =  new HtmlModule;
+			std::cout << "zia html module : instancied :P" << std::endl;
+		}
+		return (HtmlModule::_singleton);
+
+	}
+
 	HtmlModule::HtmlModule(void)
 	{
-		std::cout << "zia html module : instancied :P" << std::endl;
 	}
 
 	HtmlModule::~HtmlModule(void)
@@ -51,15 +62,20 @@ namespace zia
 	}
 	bool	HtmlModule::doExec(IModuleRequest &request, IModuleClient &client, IModuleResponse &response)
 	{
-		response.setVersion("HTTP/1.1");
+		std::cout << "request uri = " << request.getURI() << std::endl;
+		
+		response.setVersion(request.getVersion());
 		response.setCode(200);
-
-		response.setHeader("Content-Length", "74");
-		//response.setHeader("Connection", "close");
-		response.setHeader("Content-Type", "text/html; charset=utf-8");
-
-		response.setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
-	
+		response.setHeader("Connection", "close");
+		std::string		contenttype;
+		request.getHeaders("Content-Type", contenttype);
+		response.setHeader("Content-Type", contenttype);
+		//response.setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+		std::string		fp("C://wamp/www");
+		if (!request.getURI().compare("/"))
+			request.setURI(std::string("/Google.htm"));
+		response.setFilePath(fp + request.getURI());
+		response.isTmpFile(true);
 		return true;
 	}
 }
@@ -67,7 +83,7 @@ namespace zia
 
 zia::IModule		*createInstance(void)
 {
-	return (new zia::HtmlModule());
+	return (zia::HtmlModule::getInstance());
 }
 
 #if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)

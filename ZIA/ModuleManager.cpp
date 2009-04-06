@@ -49,7 +49,8 @@ void	ModuleManager::LoadModule(const char* modulePath, Config &cfg)
 	tmp = this->_loader->getInstanceFromModule((LPCTSTR)tmp_fname);
 	if (tmp)
 	{
-		tmp->OnLoad(&cfg);
+		std::cout << "onLoad return : " << tmp->OnLoad(&cfg) << std::endl;
+		std::cout << "get name from loader : " << tmp->getName() << std::endl;
 		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp, modulePath)));
 	}
 	else

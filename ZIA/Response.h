@@ -12,6 +12,7 @@ class					Response : public zia::IModuleResponse
 {
 private:
 	bool										_isTmpFile;
+	bool										_isReady;
 	short										_code;
 	std::string									_content;
 	std::string									_version;
@@ -36,6 +37,8 @@ public:
 	void										buildMessage(void);
 	void										setFilePath(const std::string&);
 	const std::string&							getFilePath(void) const;
+	void										isReady(bool);
+	bool										isReady(void) const;
 	void										isTmpFile(bool);
 	bool										isTmpFile(void) const;
 };

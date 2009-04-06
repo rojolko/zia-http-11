@@ -4,7 +4,6 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 {
 	//<IModuleOnAccept>
 	_mm = ModuleManager::getInstance();
-	_mm->dumpLoadedModule();
 	_moduleList = _mm->getModuleList();
 	_status = CONNECT;
 	_sock = sock;
@@ -12,6 +11,9 @@ Client::Client(SOCKET sock, sockaddr srcInf, SOCKADDR_IN srcInfIn)
 	_clientSrcInfIn = srcInfIn;
 	_request = NULL;
 	_response = NULL;
+
+	_sendRet = 0;
+
 	_doOnAccept();
 	_timer.start();
 }
@@ -115,7 +117,7 @@ bool	Client::needtoWrite()
 {
 	if (this->_response == NULL)
 		return false;
-	return this->_response->isTmpFile();
+	return this->_response->isReady();
 }
 
 void	Client::process()
@@ -126,10 +128,14 @@ void	Client::process()
 	{
 		this->_doOnRead();
 		this->_doExec();
+		std::cout << "-------------- OnSend -------------" << std::endl;
 		this->_doOnSend();
 	}
 	else if (this->_status == RESPONSE)
+	{
+		std::cout << "-------------- DoSend -------------" << std::endl;
 		this->_doSend();
+	}
 }
 
 void		Client::_doOnAccept()
@@ -233,7 +239,7 @@ void		Client::_doExec()
 		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
 	}
 	// a remplacer !
-	/*/!\*/		this->_response->isTmpFile(true); /*/!\*/
+	/*/!\*/		this->_response->isReady(true); /*/!\*/
 
 	///////////////////////   /!\  TEST  END  /!\    ////////////////////////
 	this->_status = IDLE;
@@ -256,7 +262,7 @@ void		Client::_doOnSend()
 
 	if (!mod_on_send)
 		;
-	this->_response->buildMessage();
+//	this->_response->buildMessage();
 }
 
 void		Client::_doSend()
@@ -264,25 +270,72 @@ void		Client::_doSend()
 	bool		mod_do_send = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 	unsigned int	mod_int;
+	int				fileSize;
+	char			buf[10000];
+	std::string	buffer;
+	int				readRet;
+	int				merde = 0;
 
-	this->allocResponse();
+	std::ifstream	toto;
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(DO_SEND))
 		{
-			getAs<zia::IModuleDoSend>(i->first)->doSend(*this, (void*)this->_response->getMessage().c_str(), mod_int);
+			this->_sendRet = getAs<zia::IModuleDoSend>(i->first)->doSend(*this, (void*)this->_response->getMessage().c_str(), mod_int);
 			mod_do_send = true;
+			this->_status = IDLE;
 		}
-
 	if (!mod_do_send)
 	{
-		//		std::cout << "Send to client : [" << this->_response->getBuf() << "]" << std::endl;
-		/*std::cout << "Send return = [" << */
-		send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0)
-			/* << "]" << std::endl*/;
+		if (this->_response->isTmpFile())
+		{
+			std::cout << "opening ... : " << this->_response->getFilePath() << std::endl;
+			toto.open(this->_response->getFilePath().c_str(), std::ifstream::binary);
+			if (toto.fail())
+				std::cout << "ERROR OPENNING : " << this->_response->getFilePath() << std::endl;
+			else
+				std::cout << "Open OK : " << this->_response->getFilePath() << std::endl;
+			if (this->_sendRet)
+				toto.seekg(this->_sendRet);
+			toto.seekg(0, std::ios::end);
+			fileSize = toto.tellg();
+			toto.seekg(0, std::ios::beg);
+			std::cout << "taille du fichier : " << fileSize << std::endl;
+			this->_response->setHeader("Content-Length", Tools::intToString(fileSize));
+
+			while (fileSize > 0)
+			{
+				toto.seekg(merde, std::ios::beg);
+				toto.read(buf, 1000);
+				readRet = toto.gcount();
+				buffer.insert(merde, buf, fileSize < readRet ? fileSize : readRet);
+				merde += readRet;
+				fileSize -= readRet;
+
+				std::cout << "buffer len : " << buffer.size() << " filesize = " << fileSize << std::endl;
+				if (!merde)
+					break;
+			}
+			this->_response->buildMessage();
+			this->_response->setMessage(this->_response->getMessage() + buffer);
+
+			if (toto.gcount() <= toto.tellg())
+				this->_status = RESPONSE;
+			this->_sendRet = send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0);
+			std::cout << "[" << this->_sendRet << "] have been send" << std::endl;
+			if (this->_status != RESPONSE)
+				this->_status = IDLE;
+		}
+		else
+			this->_sendRet = send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0);
+		this->_status = IDLE;
 	}
-	this->delRequest();
-	this->delResponse();
+	if (this->_status == IDLE || this->_status == CLOSE)
+	{
+		this->delRequest();
+		this->delResponse();
+		this->_sendRet = 0;
+	}
 	//Depend of Connection Header and server conf
 	this->_status = IDLE;//
 }
