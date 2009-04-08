@@ -67,13 +67,15 @@ namespace zia
 		response.setVersion(request.getVersion());
 		response.setCode(200);
 		response.setHeader("Connection", "close");
-		std::string		contenttype;
-		request.getHeaders("Content-Type", contenttype);
+		std::string		contenttype("text/html");
+	//	request.getHeaders("Content-Type", contenttype);
 		response.setHeader("Content-Type", contenttype);
 		//response.setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
-		std::string		fp("C://wamp/www");
+		
+		// PATH du fichier GuiKs.htm
+		std::string		fp("C://www");
 		if (!request.getURI().compare("/"))
-			request.setURI(std::string("/Google.htm"));
+			request.setURI(std::string("/GuiKs.htm"));
 		response.setFilePath(fp + request.getURI());
 		response.isTmpFile(true);
 		return true;
