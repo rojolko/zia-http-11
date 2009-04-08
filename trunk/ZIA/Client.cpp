@@ -236,7 +236,7 @@ void		Client::_doExec()
 		//this->_response->setHeader("Connection", "close");
 		this->_response->setHeader("Content-Type", "text/html; charset=utf-8");
 
-		this->_response->setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
+		this->_response->setContent("<html><img src=\"/image.prout\"\\></br>\nContent fichier/image/what-else</html>");
 	}
 	// a remplacer !
 	/*/!\*/		this->_response->isReady(true); /*/!\*/
@@ -261,7 +261,9 @@ void		Client::_doOnSend()
 		}
 
 	if (!mod_on_send)
-		;
+	  {
+	    ;
+	  }
 //	this->_response->buildMessage();
 }
 

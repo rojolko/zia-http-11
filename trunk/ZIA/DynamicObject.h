@@ -2,27 +2,37 @@
 #define _DYNAMICOBJECT_H_
 
 #include <string>
-#include <Windows.h>
-
 #include "IModule.hpp"
 
-#define DO_INSTANTIATOR "createInstance"
-
+/// WIN
+#if defined(WIN32) || defined(WIN64)
+# include <Windows.h>
 extern "C"
 {
 	typedef zia::IModule* (__cdecl *MYPROC)(); 
 }
 
+/// *NIX
+#else
+# include <dlfcn.h>
+# define HINSTANCE	void*
+# define MYPROC		void*
+# define LPCTSTR	const char*
+#endif
+
+#define DO_INSTANTIATOR "createInstance"
+
 class DynamicObject
 {
-private:
-	HINSTANCE		_hinstLib; 
-	MYPROC			_procAdd; 
-public:
-	DynamicObject();
-	~DynamicObject();
-
-	zia::IModule	*getInstanceFromModule(LPCTSTR);
+ private:
+  HINSTANCE		_hinstLib; 
+  MYPROC		_procAdd; 
+  
+ public:
+  DynamicObject();
+  ~DynamicObject();
+  
+  zia::IModule		*getInstanceFromModule(LPCTSTR dllName);
 };
 
 #endif
