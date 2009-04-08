@@ -75,7 +75,7 @@ namespace zia
 		// PATH du fichier GuiKs.htm
 		std::string		fp("C://www");
 		if (!request.getURI().compare("/"))
-			request.setURI(std::string("/GuiKs.htm"));
+			request.setURI(std::string("/index.htm"));
 		response.setFilePath(fp + request.getURI());
 		response.isTmpFile(true);
 		return true;
