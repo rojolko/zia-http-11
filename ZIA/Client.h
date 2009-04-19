@@ -16,7 +16,6 @@
 # define SOCKET			int
 //# define sockaddr		struct sockaddr_in *
 # define SOCKADDR_IN		struct sockaddr_in
-# define closesocket(sock)	close(sock)
 
 #endif
 

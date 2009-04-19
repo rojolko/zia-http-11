@@ -1,9 +1,6 @@
-#if defined(WIN32) || defined(WIN64)
-# include <Windows.h>
-#endif
-
 #include "ConnectionManager.h"
 #include <iostream>
+#include <Windows.h>
 #include "IModule.hpp"
 #include "DynamicObject.h"
 #include "ModuleManager.h"
@@ -51,3 +48,4 @@ int	main(int ac, char *av[])
 		exit(-1);
 	}
 }
+

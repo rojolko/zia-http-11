@@ -1,14 +1,11 @@
 #ifndef _MODULEMANAGER_H_
 #define _MODULEMANAGER_H_
 
-#if defined(WIN32) || defined(WIN64)
-# include <Windows.h>
-#endif
-
 #include <list>
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <Windows.h>
 #include <cstdlib>
 
 #include "IModule.hpp"
