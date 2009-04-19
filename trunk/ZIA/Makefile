@@ -1,17 +1,11 @@
 SRC =		Client.cpp \
-		Config.cpp \
 		ConnectionManager.cpp \
-		DynamicObject.cpp \
 		main.cpp \
-		ModuleInfo.cpp \
-		ModuleManager.cpp \
 		Request.cpp \
 		Response.cpp \
 		Timer.cpp \
-		Tools.cpp
-#		utilisationthread.cpp
-#		Thread.cpp \
-
+		Thread.cpp \
+		utilisationthread.cpp
 
 OBJ =		$(SRC:.cpp=.o)
 
@@ -19,13 +13,11 @@ BIN =		zia
 
 GCC =		g++
 
-LDFLAGS	=	-ldl
-
-CXXFLAGS =	-Wno-return-type  -I. -Innapi
+CXXFLAGS =	-W -Wall -I.
 
 
 $(BIN)	:	$(OBJ)
-		$(GCC) $(LDFLAGS) $(OBJ) -o $(BIN)
+		$(GCC) $(OBJ) -o $(BIN)
 
 all	:	$(BIN)
 
@@ -38,3 +30,4 @@ fclean	:	clean
 re	:	fclean all
 
 .PHONY	:	all clean fclean re
+
