@@ -21,6 +21,8 @@
 #include <sstream>
 
 #include "IModule.hpp"
+#include "ModuleInfo.h"
+#include "ModuleManager.h"
 #include "cl_stat_enum.h"
 
 #define RQ_BUFF_SIZE 2048
@@ -45,6 +47,9 @@ private:
 	std::map<std::string, std::string>				_varList;
 	std::map<std::string, std::string>::iterator	_varIt;
 
+	ModuleManager*									_mm;
+	std::map<zia::IModule*, ModuleInfo*>			_moduleList;
+
 	void		parseRequestMethodPathVers();
 	void		parseVars();
 	void		parseBody();
@@ -60,7 +65,7 @@ public:
 	Request(const SOCKET sock);
 	~Request(void);
 
-	CL_STAT				processRequest();
+	CL_STAT				processRequest(zia::IModuleClient *client);
 	const std::string			getRequest() const;
 	const int			getRetVal() const;
 	const short			getStatusCode() const;

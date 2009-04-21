@@ -159,37 +159,15 @@ void		Client::_doRead()
 {
 	this->allocRequest();
 
-	bool		mod_do_read = false;
-	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
-
-	void*		mod_void = 0;
-	int			mod_int = 0;
-
-	this->allocResponse();
-
-	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
-		if (i->second->isModule(DO_READ))
-		{
-			getAs<zia::IModuleDoRead>(i->first)->doRead(*this, mod_void, mod_int);
-			mod_do_read = true;
-		}
-
-	if (!mod_do_read)
-	{
-		//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
-		// Launch Read on the client's socket
-		this->_status = this->_request->processRequest();
-		//std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
-		this->_timer.start();
-	}
+	this->_status = this->_request->processRequest(this);
+	std::cout << "ReadRet -> [" << this->_request->getRetVal() << "]" << std::endl;
+	this->_timer.start();
 }
 
 void		Client::_doOnRead()
 {
 	bool		mod_on_read = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
-
-	this->allocResponse();
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(ON_READ))
