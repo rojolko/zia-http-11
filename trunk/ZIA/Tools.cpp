@@ -7,3 +7,4 @@ std::string	Tools::intToString(const int &value)
 	nb << value;
 	return nb.str();
 }
+

@@ -3,11 +3,13 @@
 
 ModuleInfo::ModuleInfo(zia::IModule* module, const char *filePath)
 {
-	_name = "";//module->getName();
+	_name = module->getName();
 	_path = filePath;
 
-	_heritTable[SPECIFIC_PORT] = (getAs<zia::IModuleSpecificPort>(module));
-	_heritTable[SPECIFIC_EXTENSION] = (getAs<zia::IModuleSpecificExtension>(module));
+	if (_heritTable[SPECIFIC_PORT] = (getAs<zia::IModuleSpecificPort>(module)))
+		getAs<zia::IModuleSpecificPort>(module)->getPorts(_ports);
+	if (_heritTable[SPECIFIC_EXTENSION] = (getAs<zia::IModuleSpecificExtension>(module)))
+		getAs<zia::IModuleSpecificExtension>(module)->getExtensions(_exts);
 	_heritTable[ON_ACCEPT] = (getAs<zia::IModuleOnAccept>(module));
 	_heritTable[DO_READ] = (getAs<zia::IModuleDoRead>(module));
 	_heritTable[ON_READ] = (getAs<zia::IModuleOnRead>(module));
@@ -44,7 +46,11 @@ void	ModuleInfo::dumpInfo(void)
 	std::cout << "Module name = " << this->getName() << std::endl;
 	std::cout << "Module path = " << this->getPath() << std::endl;
 	std::cout << "IModuleSpecificPort = " << this->isModule(SPECIFIC_PORT) << std::endl;
+	if (this->isModule(SPECIFIC_PORT))
+		Tools::dumpList(this->_ports);
 	std::cout << "IModuleSpecificExtension = " << this->isModule(SPECIFIC_EXTENSION) << std::endl;
+	if (this->isModule(SPECIFIC_EXTENSION))
+		Tools::dumpList(this->_exts);
 	std::cout << "IModuleOnAccept = " << this->isModule(ON_ACCEPT) << std::endl;
 	std::cout << "IModuleDoRead = " << this->isModule(DO_READ) << std::endl;
 	std::cout << "IModuleOnRead = " << this->isModule(ON_READ) << std::endl;
@@ -54,4 +60,18 @@ void	ModuleInfo::dumpInfo(void)
 	std::cout << "IModuleOnClose = " << this->isModule(ON_CLOSE) << std::endl;
 	std::cout << "IModuleDoClose = " << this->isModule(DO_CLOSE) << std::endl;
 	std::cout << "ModuleInfo DUMP --- end" << std::endl;
+}
+	
+bool				ModuleInfo::isSpecificPort(const unsigned short &port)
+{
+	if (Tools::isInList(this->_ports, port))
+		return true;
+	return false;
+}
+
+bool				ModuleInfo::isSpecificExt(const std::string &ext)
+{
+	if (Tools::isInList(this->_exts, ext))
+		return true;
+	return false;
 }

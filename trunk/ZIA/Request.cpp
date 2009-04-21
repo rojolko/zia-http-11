@@ -3,11 +3,15 @@
 
 Request::Request(void)
 {
+	_mm = ModuleManager::getInstance();
+	_moduleList = _mm->getModuleList();
 	_statusCode = 0;
 }
 
 Request::Request(const SOCKET sock)
 {
+	_mm = ModuleManager::getInstance();
+	_moduleList = _mm->getModuleList();
 	_sock = sock;
 	_statusCode = 0;
 }
@@ -21,11 +25,29 @@ Request::~Request(void)
 	}
 }
 
-CL_STAT					Request::processRequest()
+CL_STAT					Request::processRequest(zia::IModuleClient *client)
 {
 	char	readBuff[RQ_BUFF_SIZE];
+	bool		mod_do_read;
 
-	this->_retVal = recv(this->_sock, readBuff, RQ_BUFF_SIZE - 1, 0);
+	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
+
+	for (mod_do_read = 0, i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
+		if (i->second->isModule(DO_READ) && i->second->isSpecificPort((unsigned short)80) /* Tention, faudra tester le port reel du ConnectionManager */)
+		{
+			this->_retVal = getAs<zia::IModuleDoRead>(i->first)->doRead(*client, readBuff, RQ_BUFF_SIZE - 1);
+			mod_do_read = true;
+			std::cout << "Read Module" << std::endl;
+			break; /* On utilise seulement un read et non plusieurs read */
+		}
+
+	if (!mod_do_read)
+	{
+		//		std::cout << "Client with IP:" << this->getIp() << " on socket #" << this->_sock << " is FETCHING" << std::endl;
+		// Launch Read on the client's socket
+		this->_retVal = recv(this->_sock, readBuff, RQ_BUFF_SIZE - 1, 0);
+		std::cout << "Read Serveur" << std::endl;
+	}
 	//<IModuleDoRead>
 
 	// peut etre a modif ...
