@@ -19,7 +19,7 @@ BIN =		zia
 
 GCC =		g++
 
-LDFLAGS	=	-ldl
+LDFLAGS	=	-ldl -rdynamic
 
 CXXFLAGS =	-Wno-return-type  -I. -Innapi
 
