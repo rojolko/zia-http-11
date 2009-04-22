@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="massen_f&#xD;&#xA;morel_x&#xD;&#xA;descou_r&#xD;&#xA;ollivi_g">
+    <Position X="6.24" Y="4.448" Height="0.75" Width="1.44" />
+  </Comment>
+  <Class Name="ConnectionManager">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIgAgQkANAAAAKAACAAAAQAAgSBAAACAAAACAAAAAo=</HashCode>
+      <FileName>ConnectionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Client">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAIAkAIggAiAAYAAgABIAAAAAAEAIAAhgADBAAAQ=</HashCode>
+      <FileName>Client.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Timer">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAwAAAAgAAAAAEAAAAAgAgAAAIQAgEAEIAA=</HashCode>
+      <FileName>Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Response">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AICACAAMAABgKAADAgACAAgAQAQAAAAAEAAABgIiAAA=</HashCode>
+      <FileName>Response.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Request">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AADBCYAMAAQgEAAiQEAAAAgAQgQBwABIUEIAAgAgEgA=</HashCode>
+      <FileName>Request.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Thread">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAUAYAAAAAAAAAAAAAAAAAAAAAAACABAAAAA=</HashCode>
+      <FileName>Thread.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="CL_STAT">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAEAAAAAAAAAAAAAAAAAgAAAAACAAABAAAAAEAAAAA=</HashCode>
+      <FileName>cl_stat_enum.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
