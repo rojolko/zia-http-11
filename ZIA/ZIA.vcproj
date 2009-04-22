@@ -192,7 +192,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\globals.cpp"
+				RelativePath=".\FileReader.cpp"
 				>
 			</File>
 			<File
@@ -259,6 +259,10 @@
 			</File>
 			<File
 				RelativePath=".\DynamicObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FileReader.h"
 				>
 			</File>
 			<File

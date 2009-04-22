@@ -42,7 +42,10 @@ namespace zia
 
 	std::string		HtmlModule::getName(void) const
 	{
-		return ("mod_html");
+		char	*toto;
+
+		toto = "mod_html";
+		return (toto);
 	}
 /*	int		HtmlModule::doRead(IModuleClient &cl, void *buf, unsigned int size)
 	{
@@ -75,9 +78,9 @@ namespace zia
 		// PATH du fichier GuiKs.htm
 		std::string		fp("K://TAF/Zia/Debug");
 		if (!request.getURI().compare("/"))
-			request.setURI(std::string("/index.htm"));
+			request.setURI(std::string("/ps.htm"));
 		response.setFilePath(fp + request.getURI());
-		response.isTmpFile(true);
+		response.isReady(true);
 		return true;
 	}
 }

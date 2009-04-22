@@ -9,7 +9,9 @@ Response::Response(const std::string& str)
 	_content = "";
 	_version = "";
 	_message = "";
+	_buf = "";
 	_filePath = "";
+	_headersDone = false;
 	_requestMethod = str;
 }
 
@@ -110,45 +112,56 @@ bool	Response::isReady(void) const
 	return this->_isReady;
 }
 
+const std::string	&Response::getBuf(void) const
+{
+	return this->_buf;
+}
 
 // own
 
-void	Response::buildMessage(void)
+void	Response::buildBuf(void)
 {
 	int i;
-	// status-line
-	this->_message += this->getVersion();
-	this->_message += " ";
-	this->_message += Tools::intToString((int)this->getCode());
-	this->_message += " ";
-	for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
-	if (t_SatusCode[i].cde != NULL)
-		this->_message += Tools::charToString((const char*)t_SatusCode[i].str);
-	this->_message += "\r\n";
 
-	// general-header | response-header | entity-header
-	for (this->_headersIt = this->_headers.begin(); this->_headersIt != this->_headers.end(); ++this->_headersIt)
+	if (!this->_headersDone)
 	{
-		this->_message += this->_headersIt->first;
-		this->_message += ": ";
-		this->_message += this->_headersIt->second;
-		this->_message += "\r\n";
+		// status-line
+		this->_buf += this->getVersion();
+		this->_buf += " ";
+		this->_buf += Tools::intToString((int)this->getCode());
+		this->_buf += " ";
+		for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
+		if (t_SatusCode[i].cde != NULL)
+			this->_buf += Tools::charToString((const char*)t_SatusCode[i].str);
+		this->_buf += "\r\n";
+
+		// general-header | response-header | entity-header
+		for (this->_headersIt = this->_headers.begin(); this->_headersIt != this->_headers.end(); ++this->_headersIt)
+		{
+			this->_buf += this->_headersIt->first;
+			this->_buf += ": ";
+			this->_buf += this->_headersIt->second;
+			this->_buf += "\r\n";
+		}
+		// CRLF
+		this->_buf += "\r\n";
+		this->_headersDone = true;
 	}
 
-	// CRLF
-	this->_message += "\r\n";
-
-	// message-body
-	if (this->_requestMethod.compare(t_Methods[3]) != 0)
+	if (this->_buf.length() < BUFSIZ)
 	{
-		if (this->getCode() >= 400)
-		for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
+		// message-body
+		if (this->_requestMethod.compare(t_Methods[3]) != 0)
 		{
-			this->_message += Tools::intToString((int)t_SatusCode[i].cde);		
-			this->_message += " ";
-			this->_message += Tools::charToString((const char*)t_SatusCode[i].str);			
+			if (this->getCode() >= 400)
+			for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
+			{
+				this->_buf += Tools::intToString((int)t_SatusCode[i].cde);		
+				this->_buf += " ";
+				this->_buf += Tools::charToString((const char*)t_SatusCode[i].str);			
+			}
+			if (!this->getContent().empty())
+				this->_buf += this->getContent();
 		}
-		if (!this->getContent().empty())
-			this->_message += this->getContent();
 	}
 }

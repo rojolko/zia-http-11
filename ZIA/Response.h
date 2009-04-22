@@ -15,8 +15,10 @@ t_statcde t_SatusCode[];
 class					Response : public zia::IModuleResponse
 {
 private:
+	std::string							_buf;
 	bool										_isTmpFile;
 	bool										_isReady;
+	bool										_headersDone;
 	short										_statusCode;
 	std::string									_content;
 	std::string									_version;
@@ -28,6 +30,8 @@ private:
 public:
 	Response(const std::string& str);
 	~Response(void);
+	const std::string&			getBuf(void) const;
+	void										buildBuf(void);
 	void										setVersion(const std::string&);
 	const std::string&							getVersion(void) const;
 	void										setHeaders(const std::map<std::string, std::string>&);
@@ -40,7 +44,6 @@ public:
 	void										setMessage(const std::string&);
 	const std::string&							getMessage(void) const;
 	const std::string&							getMethod(void) const;
-	void										buildMessage(void);
 	void										setFilePath(const std::string&);
 	const std::string&							getFilePath(void) const;
 	void										isReady(bool);

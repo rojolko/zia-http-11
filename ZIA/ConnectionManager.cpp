@@ -20,10 +20,6 @@ ConnectionManager::ConnectionManager(const int port, const Config &cfg)
 
 	mm = ModuleManager::getInstance();
 
-	mm->LoadModule("mod_bf.dll", this->_cfgMgr);
-	mm->LoadModule("zia_html.dll", this->_cfgMgr);
-//	mm->LoadModule("zia_ban.dll", this->_cfgMgr);
-	mm->LoadModule("mod_test2.dll", this->_cfgMgr);
 	mm->dumpLoadedModule();
 }
 
