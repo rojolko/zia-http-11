@@ -23,17 +23,18 @@ int	main(int ac, char *av[])
 
 	mm = ModuleManager::getInstance();
 
-//	mm->LoadModule("mod_bf.dll", cfg);
+//		mm->LoadModule("mod_bf.dll", cfg);
 //	mm->LoadModule("zia_html.dll", cfg);
 //	mm->LoadModule("zia_ban.dll", cfg);
 //	mm->LoadModule("mod_test1.dll", cfg);
+  	mm->LoadModule("mod_test2.dll", cfg);
 
 	mm->dumpLoadedModule();
 
 	std::cout << "ZIA server Startup..." << std::endl;
 	try
 	{
-		cm = new ConnectionManager(8080, cfg);
+		cm = new ConnectionManager(8081, cfg);
 		while (1)
 		{
 			cm->fillFdSet();

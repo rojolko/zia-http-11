@@ -31,6 +31,7 @@
 #include "mod_type_def.h"
 #include "Timer.h"
 #include "Tools.h"
+#include "FileReader.h"
 
 #include "getAs.hpp"
 
@@ -52,6 +53,8 @@ private:
 	int			_sendRet;
 	ModuleManager*	_mm;
 	std::map<zia::IModule*, ModuleInfo*>	_moduleList;
+	FileReader	*_file;
+
 	void		_doOnAccept();
 	void		_doRead();
 	void		_doOnRead();

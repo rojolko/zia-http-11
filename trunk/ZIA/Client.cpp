@@ -248,72 +248,41 @@ void		Client::_doSend()
 	bool		mod_do_send = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 	unsigned int	mod_int;
-	int				fileSize;
-	char			buf[10000];
-	std::string	buffer;
-	int				readRet;
-	int				merde = 0;
-
-	std::ifstream	toto;
-
+	char			buf[BUFSIZ];
+	
+	this->_status = RESPONSE;
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(DO_SEND))
 		{
 			this->_sendRet = getAs<zia::IModuleDoSend>(i->first)->doSend(*this, (void*)this->_response->getMessage().c_str(), mod_int);
+			this->_response->getMessage().substr(this->_sendRet, this->_response->getMessage().length() - this->_sendRet);
 			mod_do_send = true;
+			if (this->_response->getMessage().length() == this->_sendRet);
+				this->_response->isReady(true);
 			this->_status = IDLE;
 		}
 	if (!mod_do_send)
 	{
 		if (this->_response->isTmpFile())
 		{
-			std::cout << "opening ... : " << this->_response->getFilePath() << std::endl;
-			toto.open(this->_response->getFilePath().c_str(), std::ifstream::binary);
-			if (toto.fail())
-				std::cout << "ERROR OPENNING : " << this->_response->getFilePath() << std::endl;
-			else
-				std::cout << "Open OK : " << this->_response->getFilePath() << std::endl;
-			if (this->_sendRet)
-				toto.seekg(this->_sendRet);
-			toto.seekg(0, std::ios::end);
-			fileSize = toto.tellg();
-			toto.seekg(0, std::ios::beg);
-			std::cout << "taille du fichier : " << fileSize << std::endl;
-			if (fileSize <= 0)
-			{
-				std::cout << "go in:" << std::endl;
+			this->_file = new FileReader(this->_response->getFilePath());
+			if (_file->haveFail())
 				this->_response->setCode(404);
-				this->_response->setHeader("Content-Length", std::string("0"));
-			}
-			else
-				this->_response->setHeader("Content-Length", Tools::intToString(fileSize));
-
-			while (fileSize > 0)
+			this->_response->setHeader("Content-Length", Tools::intToString(this->_file->getFileSize()));
+			this->_file->getContentFile(buf, BUFSIZ);
+			this->_response->setContent(std::string(buf));
+			if (this->_file->getReadRet() == this->_file->getFileSize())
 			{
-				toto.seekg(merde, std::ios::beg);
-				toto.read(buf, 1000);
-				readRet = toto.gcount();
-				buffer.insert(merde, buf, fileSize < readRet ? fileSize : readRet);
-				merde += readRet;
-				fileSize -= readRet;
-
-				std::cout << "buffer len : " << buffer.size() << " filesize = " << fileSize << std::endl;
-				if (!merde)
-					break;
-			}
-			this->_response->buildMessage();
-			this->_response->setMessage(this->_response->getMessage() + buffer);
-
-			if (toto.gcount() <= toto.tellg())
-				this->_status = RESPONSE;
-			this->_sendRet = send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0);
-			std::cout << "[" << this->_sendRet << "] have been send" << std::endl;
-			if (this->_status != RESPONSE)
+				this->_response->isReady(false);
 				this->_status = IDLE;
+			}
 		}
-		else
-			this->_sendRet = send(this->_sock, this->_response->getMessage().c_str(), this->_response->getMessage().size(), 0);
-		this->_status = IDLE;
+		this->_response->buildBuf();
+		this->_sendRet = send(this->_sock, this->_response->getBuf().c_str(), this->_response->getBuf().size(), 0);
+		this->_response->getBuf().substr(this->_sendRet, this->_response->getBuf().length() - this->_sendRet);
+
+		if (this->_status != IDLE && this->_sendRet == this->_response->getBuf().length())
+			this->_response->isReady(false);
 	}
 	if (this->_status == IDLE || this->_status == CLOSE)
 	{
