@@ -1,5 +1,5 @@
 #include "Request.h"
-#include "globals.h"
+
 
 Request::Request(void)
 {
