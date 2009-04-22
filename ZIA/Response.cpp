@@ -1,14 +1,16 @@
 #include "Response.h"
 
-Response::Response(void)
+
+Response::Response(const std::string& str)
 {
 	_isTmpFile = false;
 	_isReady = false;
-	_code = 0;
+	_statusCode = 0;
 	_content = "";
 	_version = "";
 	_message = "";
 	_filePath = "";
+	_requestMethod = str;
 }
 
 Response::~Response(void)
@@ -55,12 +57,12 @@ const std::string&	Response::getContent(void) const
 
 void	Response::setCode(short code)
 {
-	this->_code = code;
+	this->_statusCode = code;
 }
 
 short	Response::getCode(void) const
 {
-	return this->_code;
+	return this->_statusCode;
 }
 
 void	Response::setMessage(const std::string& message)
@@ -71,6 +73,11 @@ void	Response::setMessage(const std::string& message)
 const std::string&	Response::getMessage(void) const
 {
 	return this->_message;
+}
+
+const std::string&	Response::getMethod(void) const
+{
+	return this->_requestMethod;
 }
 
 void	Response::setFilePath(const std::string& filePath)
@@ -108,12 +115,15 @@ bool	Response::isReady(void) const
 
 void	Response::buildMessage(void)
 {
+	int i;
 	// status-line
 	this->_message += this->getVersion();
 	this->_message += " ";
-	//this->_message += this->getCode();
-	// a remplacer 
-	this->_message += "200";
+	this->_message += Tools::intToString((int)this->getCode());
+	this->_message += " ";
+	for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
+	if (t_SatusCode[i].cde != NULL)
+		this->_message += Tools::charToString((const char*)t_SatusCode[i].str);
 	this->_message += "\r\n";
 
 	// general-header | response-header | entity-header
@@ -129,6 +139,16 @@ void	Response::buildMessage(void)
 	this->_message += "\r\n";
 
 	// message-body
-	if (!this->getContent().empty())
-		this->_message += this->getContent();
+	if (this->_requestMethod.compare(t_Methods[3]) != 0)
+	{
+		if (this->getCode() >= 400)
+		for (i = 0; t_SatusCode[i].cde != NULL && t_SatusCode[i].cde != this->getCode(); i++);
+		{
+			this->_message += Tools::intToString((int)t_SatusCode[i].cde);		
+			this->_message += " ";
+			this->_message += Tools::charToString((const char*)t_SatusCode[i].str);			
+		}
+		if (!this->getContent().empty())
+			this->_message += this->getContent();
+	}
 }

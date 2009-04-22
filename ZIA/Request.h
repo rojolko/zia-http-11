@@ -4,7 +4,7 @@
 #if defined(WIN32) || defined(WIN64)
 
 // WINDBLOWS
-# include <Winsock2.h>
+#include <Winsock2.h>
 
 #else
 
@@ -24,11 +24,15 @@
 #include "ModuleInfo.h"
 #include "ModuleManager.h"
 #include "cl_stat_enum.h"
+#include "globals.h"
+
 
 #define RQ_BUFF_SIZE 2048
 
 #define C_ENDL	"\r\n"
 #define C_ENDL_SIZE 2
+
+
 
 class Request : public zia::IModuleRequest
 {

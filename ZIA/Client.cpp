@@ -81,10 +81,10 @@ void	Client::allocRequest()
 		this->_request = new Request(this->_sock);
 }
 
-void	Client::allocResponse()
+void	Client::allocResponse(const std::string& str)
 {
 	if (this->_response == NULL)
-		this->_response = new Response();
+		this->_response = new Response(str);
 }
 
 void	Client::delRequest()
@@ -188,7 +188,7 @@ void		Client::_doExec()
 	bool		mod_do_exec = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 
-	this->allocResponse();
+	this->allocResponse(this->_request->getMethod());
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(DO_EXEC))
@@ -229,7 +229,7 @@ void		Client::_doOnSend()
 	bool		mod_on_send = false;
 	std::map<zia::IModule*, ModuleInfo*>::iterator	i;
 
-	this->allocResponse();
+	this->allocResponse(this->_request->getMethod());
 
 	for (i = this->_moduleList.begin(); i != this->_moduleList.end(); ++i)
 		if (i->second->isModule(ON_SEND))
@@ -279,7 +279,14 @@ void		Client::_doSend()
 			fileSize = toto.tellg();
 			toto.seekg(0, std::ios::beg);
 			std::cout << "taille du fichier : " << fileSize << std::endl;
-			this->_response->setHeader("Content-Length", Tools::intToString(fileSize));
+			if (fileSize <= 0)
+			{
+				std::cout << "go in:" << std::endl;
+				this->_response->setCode(404);
+				this->_response->setHeader("Content-Length", std::string("0"));
+			}
+			else
+				this->_response->setHeader("Content-Length", Tools::intToString(fileSize));
 
 			while (fileSize > 0)
 			{

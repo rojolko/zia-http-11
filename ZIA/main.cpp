@@ -5,6 +5,7 @@
 #include "DynamicObject.h"
 #include "ModuleManager.h"
 
+
 int	main(int ac, char *av[])
 {
 	ConnectionManager	*cm;
@@ -12,11 +13,12 @@ int	main(int ac, char *av[])
 	zia::IModule		*test;
 	Config				cfg;
 
+
 	//std::cout.setstate(std::ios::failbit); /* Pour desactiver les sorties */
 	cfg.setInfo("www-dir", "./");
 	cfg.setInfo("tmp-dir", "./");
 	cfg.setInfo("homepage", "index.bf");
-	cfg.setInfo("homepage", "index.php");
+	cfg.setInfo("homepage", "index.html");
 	cfg.dump();
 
 	mm = ModuleManager::getInstance();
@@ -32,8 +34,6 @@ int	main(int ac, char *av[])
 	try
 	{
 		cm = new ConnectionManager(8080, cfg);
-
-		//ThreadExample();
 		while (1)
 		{
 			cm->fillFdSet();
