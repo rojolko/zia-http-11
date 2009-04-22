@@ -74,7 +74,7 @@ public:
 	void		canWrite(int*);
 	void		canRead(int*);
 	void		allocRequest();
-	void		allocResponse();
+	void		allocResponse(const std::string& str);
 	void		delRequest();
 	void		delResponse();
 	const char	*getIp();

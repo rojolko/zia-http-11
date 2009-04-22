@@ -73,7 +73,7 @@ namespace zia
 		//response.setContent("<html><img src=\"/image.prout\"\></br>\nContent fichier/image/what-else</html>");
 		
 		// PATH du fichier GuiKs.htm
-		std::string		fp("C://www");
+		std::string		fp("K://TAF/Zia/Debug");
 		if (!request.getURI().compare("/"))
 			request.setURI(std::string("/index.htm"));
 		response.setFilePath(fp + request.getURI());

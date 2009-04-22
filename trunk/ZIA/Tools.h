@@ -2,11 +2,14 @@
 #define _TOOLS_H_
 
 #include <sstream>
+#include <iostream>
 #include <list>
+
 
 namespace	Tools
 {
 	std::string intToString(const int& value);
+	std::string charToString(const char* str);
 	template<typename T>
 	void		dumpList(std::list<T> &list)
 	{

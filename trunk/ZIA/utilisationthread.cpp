@@ -23,7 +23,7 @@ void	ThreadExample()
 	  }
 	catch(char say[])
 	  {
-		  std::cout << "Exception :" << say << std::endl;
+	  std::cout << "Exception :" << say << std::endl;
       std::cout << "Program Termination." << std::endl;
       }
 }
