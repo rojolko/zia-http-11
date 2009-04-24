@@ -33,10 +33,11 @@ zia::IModule*	DynamicObject::getInstanceFromModule(LPCTSTR dllName)
   this->_hinstLib = dlopen(dllName, RTLD_NOW); // RTLD_LAZY ou RTLD_NOW
   if (this->_hinstLib != NULL)
     {
+      printf("dlopen (%s) succeed\n", dllName);
       this->_procAdd = dlsym(this->_hinstLib, DO_INSTANTIATOR);
       if (this->_procAdd)
 	{
-	  return (zia::IModule*)(this->_procAdd);
+	  return (zia::IModule *)this->_procAdd;
 	}
     }
   else // affichage erreur, a retirer...

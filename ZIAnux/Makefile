@@ -19,9 +19,9 @@ BIN =		zia
 
 GCC =		g++
 
-LDFLAGS	=	-ldl -rdynamic
+LDFLAGS	=	-ldl -L. -rdynamic
 
-CXXFLAGS =	-Wno-return-type  -I. -Innapi
+CXXFLAGS =	-Wno-return-type  -I. -Innapi -g
 
 
 $(BIN)	:	$(OBJ)

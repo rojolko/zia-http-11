@@ -34,36 +34,33 @@ void	ModuleManager::killInstance()
 
 void	ModuleManager::LoadModule(const char* modulePath, Config &cfg)
 {
-	zia::IModule*	tmp;
-	wchar_t			tmp_fname[256];
-	//tstring	ts(modulePath);
+  zia::IModule*	tmp;
+  wchar_t			tmp_fname[256];
+  //tstring	ts(modulePath);
 
-/*	std::wostringstream	wos;
-	std::wstring			ws;
-
-	wos << modulePath;
-	ws = wos.str();
-*/	
-//	this->_loader = new DynamicObject();
-	mbstowcs(tmp_fname, modulePath, 256);
-	tmp = this->_loader->getInstanceFromModule((LPCTSTR)tmp_fname);
-	if (tmp)
-	{
-		std::cout << "onLoad return : " << tmp->OnLoad(&cfg) << std::endl;
-		std::cout << "get name from loader : " << tmp->getName() << std::endl;
-		this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp, modulePath)));
-	}
-	else
-		std::cout << "Module File could not be loaded :" << modulePath << std::endl;
+  this->_loader = new DynamicObject();
+  mbstowcs(tmp_fname, modulePath, 256);
+  //tmp = this->_loader->getInstanceFromModule((LPCTSTR)tmp_fname);
+  tmp = this->_loader->getInstanceFromModule(modulePath);
+  if (tmp)
+    {
+      std::cout << "onLoad return : " << tmp->OnLoad(&cfg) << std::endl;
+      std::cout << "get name from loader : " << tmp->getName() << std::endl;
+      this->_moduleList.insert(std::pair<zia::IModule*, ModuleInfo*>(tmp, new ModuleInfo(tmp, modulePath)));
+    }
+  else
+    {
+      std::cout << "Module File could not be loaded :" << modulePath << std::endl;
+    }
 }
 
 void	ModuleManager::dumpLoadedModule(void)
 {
 	for (this->_it = this->_moduleList.begin(); this->_it != this->_moduleList.end(); ++this->_it)
-		this->_it->second->dumpInfo();
+	  this->_it->second->dumpInfo();
 }
 
 std::map<zia::IModule*, ModuleInfo*>	ModuleManager::getModuleList(void)
 {
-	return this->_moduleList;
+  return this->_moduleList;
 }

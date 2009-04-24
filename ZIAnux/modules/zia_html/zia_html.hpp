@@ -12,11 +12,11 @@
 
 namespace zia
 {
-  class						HtmlModule :	public IModule,
-								//public IModuleDoRead,
-								public IModuleSpecificExtension,
-								public IModuleOnAccept,
-								public IModuleDoExec
+  class		HtmlModule :	public IModule,
+				//public IModuleDoRead,
+				public IModuleSpecificExtension,
+				public IModuleOnAccept,
+				public IModuleDoExec
   {
   public:
     HtmlModule(void);
