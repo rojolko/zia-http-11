@@ -34,15 +34,21 @@ zia::IModule*	DynamicObject::getInstanceFromModule(LPCTSTR dllName)
   if (this->_hinstLib != NULL)
     {
       printf("dlopen (%s) succeed\n", dllName);
-      this->_procAdd = dlsym(this->_hinstLib, DO_INSTANTIATOR);
-      if (this->_procAdd)
+      zia::IModule * (*toto) (void);
+      toto = (zia::IModule * (*)(void))dlsym(this->_hinstLib, "createInstance");
+      char *error;
+      if ((error = dlerror()) != NULL)
 	{
-	  return (zia::IModule *)this->_procAdd;
+	  fprintf(stderr, "error dlsym %s\n", dlerror());
+	}
+      else
+	{
+	  return toto();
 	}
     }
   else // affichage erreur, a retirer...
     {
-      printf("error dlopen(%s): %s\n", dllName, dlerror());
+      fprintf(stderr, "error dlopen(%s): %s\n", dllName, dlerror());
     }
 
 #endif
