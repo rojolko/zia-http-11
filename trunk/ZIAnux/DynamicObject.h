@@ -20,6 +20,8 @@ extern "C"
 # define LPCTSTR	const char*
 #endif
 
+
+
 #define DO_INSTANTIATOR "createInstance"
 
 class DynamicObject

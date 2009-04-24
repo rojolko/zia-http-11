@@ -2,7 +2,7 @@
 // INCLUDES
 //
 #include "IModule.hpp"
-#include "ban.hpp"
+#include "zia_ban.hpp"
 
 namespace zia
 {

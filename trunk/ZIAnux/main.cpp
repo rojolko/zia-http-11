@@ -22,14 +22,14 @@ int	main(int ac, char *av[])
 	cfg.setInfo("homepage", "index.php");
 	cfg.dump();
 
-	mm = ModuleManager::getInstance();
-
+	//	mm = ModuleManager::getInstance();
+	
 //	mm->LoadModule("mod_bf.dll", cfg);
 //	mm->LoadModule("zia_html.dll", cfg);
 //	mm->LoadModule("zia_ban.dll", cfg);
 //	mm->LoadModule("mod_test1.dll", cfg);
 
-	mm->dumpLoadedModule();
+//	mm->dumpLoadedModule();
 
 	std::cout << "ZIA server Startup..." << std::endl;
 	try
